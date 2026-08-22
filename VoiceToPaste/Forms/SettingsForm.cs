@@ -249,13 +249,8 @@ namespace VoiceToPaste.Forms
             try
             {
                 _settingsService.Save(_settings);
-                Logger.Information("Saved the backend selection {Backend}.", selectedBackend);
-                MessageBox.Show(
-                    this,
-                    UiStrings.Get("TranscriptionEngineSavedRestartRequired"),
-                    UiStrings.Get("ApplicationTitle"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                Logger.Information("Saved the backend selection {Backend}. Restarting the application.", selectedBackend);
+                RestartRequested?.Invoke();
             }
             catch (Exception ex)
             {
@@ -448,13 +443,8 @@ namespace VoiceToPaste.Forms
             {
                 if (EnsureCudaRuntimeInstalled())
                 {
-                    Logger.Information("CUDA was installed for the existing GPU setting.");
-                    MessageBox.Show(
-                        this,
-                        UiStrings.Get("CudaInstalledRestartRequired"),
-                        UiStrings.Get("ApplicationTitle"),
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    Logger.Information("CUDA was installed for the existing GPU setting. Restarting the application.");
+                    RestartRequested?.Invoke();
                 }
             }
 

@@ -33,7 +33,6 @@
   <data name="CudaArchiveSha256LengthInvalid" xml:space="preserve"><value>The CUDA archive SHA-256 hash must be exactly 32 bytes long.</value></data>
   <data name="CudaComponentDownloading" xml:space="preserve"><value>Downloading NVIDIA CUDA component: {0}...</value></data>
   <data name="CudaComponentInstalling" xml:space="preserve"><value>Installing NVIDIA CUDA component: {0}...</value></data>
-  <data name="CudaInstalledRestartRequired" xml:space="preserve"><value>NVIDIA CUDA GPU support has been installed. Restart the application to use the GPU.</value></data>
   <data name="CudaRuntimeAlreadyInstalled" xml:space="preserve"><value>NVIDIA CUDA libraries are already installed.</value></data>
   <data name="CudaRuntimeCancelConfirmation" xml:space="preserve"><value>Are you sure you want to cancel downloading the NVIDIA CUDA libraries?</value></data>
   <data name="CudaRuntimeDownloadDescription" xml:space="preserve"><value>GPU support requires downloading NVIDIA DLL libraries.{0}{0}Download size: approximately {1} MB.{0}Disk space after installation: approximately {2} MB.</value></data>
@@ -120,7 +119,6 @@
   <data name="TranscriptionEngineAuto" xml:space="preserve"><value>Auto</value></data>
   <data name="TranscriptionEngineCpu" xml:space="preserve"><value>CPU</value></data>
   <data name="TranscriptionEngineGpu" xml:space="preserve"><value>GPU (NVIDIA CUDA)</value></data>
-  <data name="TranscriptionEngineSavedRestartRequired" xml:space="preserve"><value>The engine selection has been saved. The change will take effect after restarting the application.</value></data>
   <data name="TranscriptionError" xml:space="preserve"><value>Transcription error: {0}</value></data>
   <data name="TranscriptionInitializationRequired" xml:space="preserve"><value>Transcription requires StartInitializationAsync to be called first.</value></data>
   <data name="TranscriptionLanguageAutoDetect" xml:space="preserve"><value>Automatically detect from speech</value></data>
