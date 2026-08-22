@@ -8,6 +8,11 @@ application.
 Use it to dictate prompts, messages, emails, and other text in applications that
 support standard clipboard pasting.
 
+<p align="center">
+  <img src="./Assets/Images/preview.png" width="70%">
+</p>
+<img src="./Assets/GIFs/demo.gif">
+
 > NOTE\
 > VoiceToPaste currently supports CPU processing and NVIDIA GPU acceleration through
 > CUDA. AMD GPU acceleration is not supported and is not currently planned unless
