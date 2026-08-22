@@ -38,7 +38,7 @@ namespace VoiceToPaste.Tests
             Assert.False(settings.StartInTray);
             Assert.False(settings.AutoStart);
             Assert.Equal(AppSettings.DefaultRecordingLimitSeconds, settings.RecordingLimitSeconds);
-            Assert.Equal("Ctrl + Space", settings.Hotkey?.ToDisplayString());
+            Assert.Equal("Ctrl + Shift + Space", settings.Hotkey?.ToDisplayString());
             Assert.Empty(settings.KeyWords);
             Assert.True(File.Exists(service.SettingsPath));
             Assert.Contains("autoStart: false", File.ReadAllText(service.SettingsPath));
@@ -219,7 +219,7 @@ namespace VoiceToPaste.Tests
 
             var settings = service.Load();
 
-            Assert.Equal("Ctrl + Space", settings.Hotkey?.ToDisplayString());
+            Assert.Equal("Ctrl + Shift + Space", settings.Hotkey?.ToDisplayString());
             Assert.Null(service.LastLoadDiagnostic);
         }
 
@@ -231,9 +231,24 @@ namespace VoiceToPaste.Tests
 
             var settings = service.Load();
 
-            Assert.Equal("Ctrl + Space", settings.Hotkey?.ToDisplayString());
+            Assert.Equal("Ctrl + Shift + Space", settings.Hotkey?.ToDisplayString());
             Assert.NotNull(service.LastLoadDiagnostic);
-            Assert.Contains("key: Space", File.ReadAllText(service.SettingsPath));
+            var repairedYaml = File.ReadAllText(service.SettingsPath);
+            Assert.Contains("key: Space", repairedYaml);
+            Assert.Contains("- control", repairedYaml);
+            Assert.Contains("- shift", repairedYaml);
+        }
+
+        [Fact]
+        public void Load_ExistingCtrlSpaceHotkey_PreservesUserSetting()
+        {
+            var service = CreateService();
+            File.WriteAllText(service.SettingsPath, "hotkey:\n  key: Space\n  modifiers:\n  - control\n");
+
+            var settings = service.Load();
+
+            Assert.Equal("Ctrl + Space", settings.Hotkey?.ToDisplayString());
+            Assert.Null(service.LastLoadDiagnostic);
         }
 
         [Fact]

@@ -91,7 +91,7 @@ namespace VoiceToPaste.Services
                 {
                     Logger.Warning("Invalid global hotkey. The default hotkey will be restored.");
                     settings.Hotkey = HotkeyGesture.CreateDefault();
-                    repairs.Add("Nieprawidłowy skrót globalny — przywrócono Ctrl + Space.");
+                    repairs.Add("Nieprawidłowy skrót globalny — przywrócono Ctrl + Shift + Space.");
                 }
 
                 if (settings.RecordingLimitSeconds < AppSettings.MinimumRecordingLimitSeconds ||

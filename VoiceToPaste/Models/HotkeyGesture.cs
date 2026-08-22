@@ -18,7 +18,7 @@ namespace VoiceToPaste.Models
     {
         public string Key { get; set; } = "Space";
 
-        public List<HotkeyModifier> Modifiers { get; set; } = [HotkeyModifier.Control];
+        public List<HotkeyModifier> Modifiers { get; set; } = [HotkeyModifier.Control, HotkeyModifier.Shift];
 
         public static HotkeyGesture CreateDefault() => new();
 

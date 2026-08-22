@@ -35,7 +35,7 @@ effects.
 - The configurable hotkey works in toggle mode. The first activation starts recording,
   the second stops recording and starts transcription, and activations during
   transcription are ignored.
-- The default hotkey is `Ctrl + Space`; the hotkey can be changed or disabled.
+- The default hotkey is `Ctrl + Shift + Space`; the hotkey can be changed or disabled.
 - Audio is captured from the default system recording device as 16 kHz, 16-bit mono
   PCM and remains in memory.
 - A configurable timeout automatically stops long recordings. Empty or very quiet

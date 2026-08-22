@@ -5,14 +5,14 @@ namespace VoiceToPaste.Tests
     public sealed class HotkeyGestureTests
     {
         [Fact]
-        public void CreateDefault_ReturnsCtrlSpace()
+        public void CreateDefault_ReturnsCtrlShiftSpace()
         {
             var hotkey = HotkeyGesture.CreateDefault();
 
             Assert.Equal("Space", hotkey.Key);
-            Assert.Equal([HotkeyModifier.Control], hotkey.Modifiers);
+            Assert.Equal([HotkeyModifier.Control, HotkeyModifier.Shift], hotkey.Modifiers);
             Assert.True(hotkey.IsValid(out _));
-            Assert.Equal("Ctrl + Space", hotkey.ToDisplayString());
+            Assert.Equal("Ctrl + Shift + Space", hotkey.ToDisplayString());
         }
 
         [Theory]

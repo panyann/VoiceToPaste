@@ -52,14 +52,14 @@ allow the elevated VoiceToPaste process to create and update files.
 5. After a valid model is selected, the application restarts and loads it in the
    background.
 
-The default hotkey is `Ctrl + Space`, and the default recording timeout is 60 seconds.
+The default hotkey is `Ctrl + Shift + Space`, and the default recording timeout is 60 seconds.
 Both can be changed in Settings.
 
 ## How to use
 
 1. Focus the application into which you want to paste text.
-2. Press `Ctrl + Space` to start recording.
-3. Speak, then press `Ctrl + Space` again to stop recording and start transcription.
+2. Press `Ctrl + Shift + Space` to start recording.
+3. Speak, then press `Ctrl + Shift + Space` again to stop recording and start transcription.
 4. Keep the intended target active until transcription finishes.
 5. VoiceToPaste copies the result to the clipboard and sends `Ctrl + V` to the window
    that is active at that moment.
