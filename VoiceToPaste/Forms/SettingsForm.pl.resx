@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="btnTester.Text" xml:space="preserve"><value>Test transkrypcji</value></data>
+  <data name="labelEngine.Text" xml:space="preserve"><value>Silnik transkrypcji:</value></data>
+  <data name="labelLanguage.Text" xml:space="preserve"><value>Język transkrypcji:</value></data>
+  <data name="checkBoxStartInTray.Text" xml:space="preserve"><value>Uruchamiaj zminimalizowany w zasobniku systemowym (tray)</value></data>
+  <data name="labelHotkey.Text" xml:space="preserve"><value>Skrót klawiszowy:</value></data>
+  <data name="labelDescription.Text" xml:space="preserve"><value>Program do transkrypcji głosu i wklejenia wyniku do aktywnego okna.</value></data>
+  <data name="labelModel.Text" xml:space="preserve"><value>Model Whisper:</value></data>
+  <data name="textBoxRecordLimit.Text" xml:space="preserve"><value>60</value></data>
+  <data name="labelRecordLimit.Text" xml:space="preserve"><value>Limit nagrywania:</value></data>
+  <data name="labelSeconds.Text" xml:space="preserve"><value>sekund</value></data>
+  <data name="btnKeyWords.Text" xml:space="preserve"><value>Słowa kluczowe</value></data>
+  <data name="checkBoxAutoStart.Text" xml:space="preserve"><value>Uruchamiaj razem z systemem</value></data>
+  <data name="labelUiLanguage.Text" xml:space="preserve"><value>Język UI:</value></data>
+  <data name="$this.Text" xml:space="preserve"><value>VoiceToPaste - Ustawienia</value></data>
+</root>

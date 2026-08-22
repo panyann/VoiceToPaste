@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Aplikacja -->
+
+  <data name="ApplicationAlreadyRunning" xml:space="preserve"><value>VoiceToPaste jest już uruchomiony.</value></data>
+  <data name="ApplicationExecutablePathUnavailable" xml:space="preserve"><value>Nie można ustalić ścieżki pliku wykonywalnego aplikacji.</value></data>
+  <data name="ApplicationName" xml:space="preserve"><value>VoiceToPaste</value></data>
+  <data name="ApplicationRestartFailed" xml:space="preserve"><value>Nie udało się ponownie uruchomić aplikacji: {0}</value></data>
+  <data name="ApplicationTitle" xml:space="preserve"><value>VoiceToPaste</value></data>
+
+  <!-- Autostart -->
+
+  <data name="AutoStartChangeFailed" xml:space="preserve"><value>Nie udało się zmienić autostartu: {0}</value></data>
+  <data name="AutoStartCheckOrRepairFailed" xml:space="preserve"><value>Nie udało się sprawdzić lub naprawić autostartu: {0}</value></data>
+  <data name="AutoStartConfigurationFailed" xml:space="preserve"><value>Nie udało się skonfigurować autostartu w Harmonogramie zadań.</value></data>
+  <data name="AutoStartDisableBeforeMovingApplicationTooltip" xml:space="preserve"><value>Przed przeniesieniem lub usunięciem programu wyłącz autostart, aby usunąć zadanie Harmonogramu.</value></data>
+  <data name="AutoStartDisableFailed" xml:space="preserve"><value>Nie udało się wyłączyć autostartu w Harmonogramie zadań.</value></data>
+  <data name="AutoStartStatusCheckFailed" xml:space="preserve"><value>Nie udało się sprawdzić autostartu w Harmonogramie zadań.</value></data>
+  <data name="AutoStartTaskDescription" xml:space="preserve"><value>Uruchamia VoiceToPaste po zalogowaniu bieżącego użytkownika.</value></data>
+  <data name="AutoStartTaskMissingRepairPrompt" xml:space="preserve"><value>Autostart jest włączony, ale zadanie Harmonogramu nie istnieje.{0}{0}Czy naprawić konfigurację autostartu teraz?</value></data>
+  <data name="AutoStartTaskOutdatedRepairPrompt" xml:space="preserve"><value>Autostart jest włączony, ale zadanie Harmonogramu ma nieaktualną konfigurację.{0}{0}Czy naprawić konfigurację autostartu teraz?</value></data>
+
+  <!-- CUDA -->
+
+  <data name="CudaArchiveContainsDuplicateFile" xml:space="preserve"><value>Archiwum CUDA zawiera więcej niż jeden plik {0}.</value></data>
+  <data name="CudaArchiveMissingLibraries" xml:space="preserve"><value>Archiwum CUDA nie zawiera wymaganych bibliotek: {0}.</value></data>
+  <data name="CudaArchiveSha256LengthInvalid" xml:space="preserve"><value>Suma SHA-256 archiwum CUDA musi mieć dokładnie 32 bajty.</value></data>
+  <data name="CudaComponentDownloading" xml:space="preserve"><value>Pobieranie komponentu NVIDIA CUDA: {0}...</value></data>
+  <data name="CudaComponentInstalling" xml:space="preserve"><value>Instalowanie komponentu NVIDIA CUDA: {0}...</value></data>
+  <data name="CudaInstalledRestartRequired" xml:space="preserve"><value>Obsługa GPU NVIDIA CUDA została zainstalowana. Uruchom ponownie aplikację, aby użyć GPU.</value></data>
+  <data name="CudaRuntimeAlreadyInstalled" xml:space="preserve"><value>Biblioteki NVIDIA CUDA są już zainstalowane.</value></data>
+  <data name="CudaRuntimeCancelConfirmation" xml:space="preserve"><value>Czy na pewno anulować pobieranie bibliotek NVIDIA CUDA?</value></data>
+  <data name="CudaRuntimeDownloadDescription" xml:space="preserve"><value>Obsługa GPU wymaga pobrania bibliotek DLL NVIDIA.{0}{0}Do pobrania: około {1} MB.{0}Miejsce na dysku po instalacji: około {2} MB.</value></data>
+  <data name="CudaRuntimeDownloadFailedMessage" xml:space="preserve"><value>Nie udało się pobrać bibliotek NVIDIA CUDA:{0}{1}{0}{0}Szczegóły zapisano w:{0}{2}</value></data>
+  <data name="CudaRuntimeInstallationFailedStatus" xml:space="preserve"><value>Nie udało się zainstalować obsługi GPU NVIDIA CUDA.</value></data>
+  <data name="CudaRuntimeInstalled" xml:space="preserve"><value>Obsługa GPU NVIDIA CUDA została zainstalowana.</value></data>
+
+  <!-- Błędy ogólne i pobieranie -->
+
+  <data name="CurrentUserIdentifierUnavailable" xml:space="preserve"><value>Nie można ustalić identyfikatora bieżącego użytkownika.</value></data>
+  <data name="DictationError" xml:space="preserve"><value>Błąd dyktowania: {0}</value></data>
+  <data name="DownloadedFileIntegrityCheckFailed" xml:space="preserve"><value>Pobrany plik nie przeszedł kontroli integralności. Otrzymano SHA-256: {0}.</value></data>
+  <data name="DownloadCancelled" xml:space="preserve"><value>Pobieranie anulowano.</value></data>
+  <data name="DownloadCancelling" xml:space="preserve"><value>Anulowanie pobierania...</value></data>
+  <data name="DownloadProgressWithSize" xml:space="preserve"><value>{0} {1} MB / {2} MB ({3}%)</value></data>
+  <data name="DownloadWaitingToStart" xml:space="preserve"><value>Oczekiwanie na rozpoczęcie...</value></data>
+  <data name="ExpectedFileSizeMustBeNonNegative" xml:space="preserve"><value>Oczekiwany rozmiar pliku nie może być ujemny.</value></data>
+  <data name="GlobalHotkeyServiceUnavailable" xml:space="preserve"><value>Usługa globalnego skrótu jest niedostępna.</value></data>
+
+  <!-- Skróty klawiszowe -->
+
+  <data name="HotkeyCapturePrompt" xml:space="preserve"><value>Naciśnij skrót (Esc anuluje)</value></data>
+  <data name="HotkeyDisabled" xml:space="preserve"><value>Wyłączony</value></data>
+  <data name="HotkeyKeyUnsupported" xml:space="preserve"><value>Nieobsługiwany klawisz skrótu: {0}.</value></data>
+  <data name="HotkeyLetterOrDigitRequiresModifier" xml:space="preserve"><value>Litery i cyfry w skrócie wymagają co najmniej jednego modyfikatora.</value></data>
+  <data name="HotkeyModifiersInvalid" xml:space="preserve"><value>Modyfikatory skrótu muszą być unikalne i obsługiwane.</value></data>
+  <data name="HotkeyRegistrationFailedForGesture" xml:space="preserve"><value>Nie można zarejestrować skrótu {0} (błąd Windows: {1}).</value></data>
+  <data name="HotkeyRegistrationFailedWithWindowsError" xml:space="preserve"><value>Nie można zarejestrować skrótu (błąd Windows: {0}).</value></data>
+  <data name="HotkeyUnsupported" xml:space="preserve"><value>Nieobsługiwany skrót</value></data>
+
+  <!-- Słowa kluczowe -->
+
+  <data name="KeywordChangesSaved" xml:space="preserve"><value>Zmiany zostały zapisane.</value></data>
+  <data name="KeywordDuplicatePhrase" xml:space="preserve"><value>Wiersz {0}: fraza „{1}” jest już zdefiniowana we wcześniejszym wierszu.</value></data>
+  <data name="KeywordRowIncomplete" xml:space="preserve"><value>Wiersz {0}: uzupełnij obie kolumny albo wyczyść cały wiersz.</value></data>
+  <data name="KeywordUnsavedChangesPrompt" xml:space="preserve"><value>Masz niezapisane zmiany. Czy zamknąć okno bez zapisywania?</value></data>
+
+  <!-- Mikrofon i nagrywanie -->
+
+  <data name="MicrophoneNotFound" xml:space="preserve"><value>Nie wykryto mikrofonu w systemie.</value></data>
+  <data name="RecordingAlreadyInProgress" xml:space="preserve"><value>Nagrywanie już trwa.</value></data>
+  <data name="RecordingLimitMustBePositive" xml:space="preserve"><value>Limit nagrywania musi być dodatni.</value></data>
+  <data name="RecordingLimitValidationError" xml:space="preserve"><value>Podaj liczbę całkowitą od {0} do {1} sekund.</value></data>
+  <data name="RecordingUnavailableInCurrentState" xml:space="preserve"><value>Nie można rozpocząć nagrywania w obecnym stanie.</value></data>
+
+  <!-- Ustawienia i kontrola integralności -->
+
+  <data name="SettingsSaveFailed" xml:space="preserve"><value>Nie udało się zapisać ustawień: {0}</value></data>
+  <data name="SettingsWindowTitleWithVersion" xml:space="preserve"><value>{0} - v{1}</value></data>
+  <data name="Sha256LengthInvalid" xml:space="preserve"><value>Suma SHA-256 musi mieć dokładnie 32 bajty.</value></data>
+
+  <!-- Tester transkrypcji -->
+
+  <data name="TesterKeywordReplacementResult" xml:space="preserve"><value>Po podmianie słów kluczowych ({0}): {1}</value></data>
+  <data name="TesterModelDisposed" xml:space="preserve"><value>Model Whisper został już zwolniony.</value></data>
+  <data name="TesterModelLoadFailed" xml:space="preserve"><value>Model Whisper nie został załadowany: {0}</value></data>
+  <data name="TesterModelLoading" xml:space="preserve"><value>Model Whisper jest ładowany. Transkrypcja poczeka na jego gotowość.</value></data>
+  <data name="TesterModelNotInitialized" xml:space="preserve"><value>Model Whisper nie został jeszcze zainicjalizowany.</value></data>
+  <data name="TesterPlayback" xml:space="preserve"><value>Odtwarzanie nagrania...</value></data>
+  <data name="TesterPlaybackError" xml:space="preserve"><value>Błąd odtwarzania: {0}</value></data>
+  <data name="TesterRawTranscription" xml:space="preserve"><value>Surowa transkrypcja ({0:F1} s): {1}</value></data>
+  <data name="TesterRecordButton" xml:space="preserve"><value>Nagraj</value></data>
+  <data name="TesterRecording" xml:space="preserve"><value>Nagrywanie...</value></data>
+  <data name="TesterRecordingError" xml:space="preserve"><value>Błąd nagrywania: {0}</value></data>
+  <data name="TesterRecordingSilenceWarning" xml:space="preserve"><value> — cisza, sprawdź mikrofon</value></data>
+  <data name="TesterRecordingSummary" xml:space="preserve"><value>Nagrano {0:F1} s ({1:N0} próbek, 16 kHz mono), peak: {2:F0} dB</value></data>
+  <data name="TesterRuntimeAutoCpu" xml:space="preserve"><value>Model Whisper jest gotowy (runtime: {0}). CUDA jest niedostępna — tryb Auto używa CPU.</value></data>
+  <data name="TesterRuntimeAutoCuda" xml:space="preserve"><value>Model Whisper jest gotowy (runtime: {0}). Tryb Auto wybrał CUDA.</value></data>
+  <data name="TesterRuntimeCpuMismatch" xml:space="preserve"><value>UWAGA: wybrano CPU, ale Whisper działa na {0}. Runtime natywny ładuje się raz na proces; zmiana wymaga restartu aplikacji.</value></data>
+  <data name="TesterRuntimeGpuMismatch" xml:space="preserve"><value>UWAGA: wybrano GPU (CUDA), ale Whisper działa na {0}. CUDA jest niedostępna albo runtime został załadowany wcześniej; zmiana wymaga restartu aplikacji.</value></data>
+  <data name="TesterRuntimeReady" xml:space="preserve"><value>Model Whisper jest gotowy (runtime: {0}).</value></data>
+  <data name="TesterSilentRecordingSkipped" xml:space="preserve"><value>Pominięto transkrypcję — nagranie zawiera ciszę.</value></data>
+  <data name="TesterSpeechNotRecognized" xml:space="preserve"><value>Whisper nie rozpoznał mowy ({0:F1} s).</value></data>
+  <data name="TesterStopRecordingButton" xml:space="preserve"><value>Zatrzymaj</value></data>
+  <data name="TesterTranscribing" xml:space="preserve"><value>Transkrypcja ({0}, język: {1})...</value></data>
+  <data name="TesterTranscriptionError" xml:space="preserve"><value>Błąd transkrypcji: {0}</value></data>
+  <data name="TesterUnknownError" xml:space="preserve"><value>nieznany błąd</value></data>
+  <data name="TesterUnknownRuntime" xml:space="preserve"><value>nieznany</value></data>
+
+  <!-- Transkrypcja -->
+
+  <data name="TranscriptionBackendAlreadyInitialized" xml:space="preserve"><value>Silnik transkrypcji jest już inicjowany jako {0}, nie można przełączyć na {1}. Zmiana silnika wymaga restartu aplikacji.</value></data>
+  <data name="TranscriptionClipboardWriteFailed" xml:space="preserve"><value>Nie udało się zapisać wyniku w schowku: {0}</value></data>
+  <data name="TranscriptionEngineAuto" xml:space="preserve"><value>Automatycznie</value></data>
+  <data name="TranscriptionEngineCpu" xml:space="preserve"><value>CPU</value></data>
+  <data name="TranscriptionEngineGpu" xml:space="preserve"><value>GPU (NVIDIA CUDA)</value></data>
+  <data name="TranscriptionEngineSavedRestartRequired" xml:space="preserve"><value>Wybór silnika zapisano. Zmiana zacznie obowiązywać po ponownym uruchomieniu aplikacji.</value></data>
+  <data name="TranscriptionError" xml:space="preserve"><value>Błąd transkrypcji: {0}</value></data>
+  <data name="TranscriptionInitializationRequired" xml:space="preserve"><value>Transkrypcja wymaga wcześniejszego wywołania StartInitializationAsync.</value></data>
+  <data name="TranscriptionLanguageAutoDetect" xml:space="preserve"><value>Automatycznie z mowy</value></data>
+  <data name="TranscriptionPasteFailedClipboardRetained" xml:space="preserve"><value>Nie udało się wkleić transkrypcji. Tekst pozostaje w schowku.</value></data>
+  <data name="TranscriptionUnavailableInCurrentState" xml:space="preserve"><value>Nie można rozpocząć transkrypcji w obecnym stanie.</value></data>
+
+  <!-- Zasobnik systemowy -->
+
+  <data name="TrayMenuExit" xml:space="preserve"><value>Wyłącz</value></data>
+  <data name="TrayMenuSettings" xml:space="preserve"><value>Ustawienia</value></data>
+  <data name="TrayTooltipDictationError" xml:space="preserve"><value>VoiceToPaste — błąd dyktowania</value></data>
+  <data name="TrayTooltipHotkey" xml:space="preserve"><value>VoiceToPaste — {0}</value></data>
+  <data name="TrayTooltipHotkeyDisabled" xml:space="preserve"><value>VoiceToPaste — skrót wyłączony</value></data>
+  <data name="TrayTooltipHotkeyUnavailable" xml:space="preserve"><value>VoiceToPaste — skrót niedostępny</value></data>
+  <data name="TrayTooltipRecording" xml:space="preserve"><value>VoiceToPaste — nagrywanie</value></data>
+  <data name="TrayTooltipTranscribing" xml:space="preserve"><value>VoiceToPaste — transkrypcja</value></data>
+
+  <!-- Weryfikacja pobierania -->
+
+  <data name="UnexpectedDownloadedFileSize" xml:space="preserve"><value>Pobrano nieoczekiwaną liczbę danych ({0} B zamiast {1} B).</value></data>
+  <data name="UnexpectedErrorWithLogPath" xml:space="preserve"><value>Wystąpił nieoczekiwany błąd. Szczegóły zapisano w:{0}{1}</value></data>
+  <data name="UnexpectedServerFileSize" xml:space="preserve"><value>Serwer zwrócił plik o nieoczekiwanym rozmiarze ({0} B zamiast {1} B).</value></data>
+  <data name="UnsupportedResponseEncoding" xml:space="preserve"><value>Serwer zwrócił plik w nieobsługiwanym kodowaniu odpowiedzi.</value></data>
+
+  <!-- Modele Whisper -->
+
+  <data name="UnsupportedWhisperModel" xml:space="preserve"><value>Nieobsługiwany model Whisper: {0}.</value></data>
+  <data name="WhisperModelAlreadyDownloaded" xml:space="preserve"><value>Wybrany model jest już pobrany.</value></data>
+  <data name="WhisperModelBaseDescription" xml:space="preserve"><value>Szybki model o podstawowej jakości.</value></data>
+  <data name="WhisperModelCancelConfirmation" xml:space="preserve"><value>Czy na pewno anulować pobieranie modelu {0}?</value></data>
+  <data name="WhisperModelDownloadCompleted" xml:space="preserve"><value>Model {0} został pobrany.</value></data>
+  <data name="WhisperModelDownloadDescription" xml:space="preserve"><value>Wybrany model: {0}{1}{1}{2}{1}{1}Rozmiar do pobrania: około {3} MB.{1}Plik zostanie zapisany w: LLM\{4}</value></data>
+  <data name="WhisperModelDownloadFailedMessage" xml:space="preserve"><value>Nie udało się pobrać modelu {0}:{1}{2}{1}{1}Szczegóły zapisano w:{1}{3}</value></data>
+  <data name="WhisperModelDownloadFailedStatus" xml:space="preserve"><value>Nie udało się pobrać modelu Whisper.</value></data>
+  <data name="WhisperModelDownloading" xml:space="preserve"><value>Pobieranie modelu {0}...</value></data>
+  <data name="WhisperModelIntegrityCheckFailed" xml:space="preserve"><value>Pobrany model {0} nie przeszedł kontroli integralności.</value></data>
+  <data name="WhisperModelLargeV3Description" xml:space="preserve"><value>Najwyższa jakość rozpoznawania, największe wymagania sprzętowe.</value></data>
+  <data name="WhisperModelLargeV3TurboDescription" xml:space="preserve"><value>Wysoka jakość i szybsze działanie niż Large v3.</value></data>
+  <data name="WhisperModelMediumDescription" xml:space="preserve"><value>Wyższa jakość kosztem większego użycia pamięci.</value></data>
+  <data name="WhisperModelNotFound" xml:space="preserve"><value>Nie znaleziono modelu Whisper {0} w katalogu: {1}</value></data>
+  <data name="WhisperModelNotSelected" xml:space="preserve"><value>Nie wybrano</value></data>
+  <data name="WhisperModelSelectionRequired" xml:space="preserve"><value>Przed użyciem VoiceToPaste wybierz model Whisper w Ustawieniach.</value></data>
+  <data name="WhisperModelSmallDescription" xml:space="preserve"><value>Dobry kompromis między szybkością a jakością.</value></data>
+  <data name="WhisperModelTinyDescription" xml:space="preserve"><value>Najszybszy, najniższa jakość rozpoznawania.</value></data>
+  <data name="WhisperModelVerifying" xml:space="preserve"><value>Sprawdzanie modelu {0}...</value></data>
+</root>

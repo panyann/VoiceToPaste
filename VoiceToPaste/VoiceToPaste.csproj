@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Assets\Icons\micro-green.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <DebugType>embedded</DebugType>
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Testy używają wewnętrznego konstruktora TranscriptionService z własną ścieżką modelu -->
+    <InternalsVisibleTo Include="VoiceToPaste.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.3.0" />
+    <PackageReference Include="TaskScheduler" Version="2.12.2" />
+    <PackageReference Include="Whisper.net" Version="1.9.1" />
+    <PackageReference Include="Whisper.net.Runtime" Version="1.9.1" />
+    <!-- CUDA 13 dla GPU NVIDIA; na starszych sterownikach (CUDA 12.x) trzeba dołożyć Whisper.net.Runtime.Cuda12 -->
+    <PackageReference Include="Whisper.net.Runtime.Cuda.Windows" Version="1.9.1" />
+    <PackageReference Include="YamlDotNet" Version="18.1.0" />
+    <PackageReference Include="Serilog" Version="4.4.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Icons\*.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <None Update="licenses\NVIDIA-CUDA-TOOLKIT-EULA.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>licenses\NVIDIA-CUDA-TOOLKIT-EULA.txt</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+  </ItemGroup>
+
+  <Target Name="RemoveUnsupportedWhisperRuntimeLibraries" AfterTargets="Publish">
+    <ItemGroup>
+      <!-- Pakiet CPU dodaje wszystkie architektury Windows, ale publikujemy tylko win-x64. -->
+      <UnsupportedWhisperRuntime Include="$(PublishDir)runtimes\win-x86\**\*" />
+      <UnsupportedWhisperRuntime Include="$(PublishDir)runtimes\win-arm64\**\*" />
+      <UnsupportedWhisperRuntime Include="$(PublishDir)runtimes\cuda\linux-x64\**\*" />
+    </ItemGroup>
+
+    <Delete Files="@(UnsupportedWhisperRuntime)" />
+    <RemoveDir Directories="$(PublishDir)runtimes\win-x86" />
+    <RemoveDir Directories="$(PublishDir)runtimes\win-arm64" />
+    <RemoveDir Directories="$(PublishDir)runtimes\cuda\linux-x64" />
+  </Target>
+
+</Project>

@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoiceToPaste\VoiceToPaste.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <Target Name="CopyVoiceToPasteSatelliteResources" AfterTargets="Build">
+    <PropertyGroup>
+      <VoiceToPasteRuntimeSubdirectory Condition="'$(Configuration)' == 'Release'">win-x64\</VoiceToPasteRuntimeSubdirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <VoiceToPasteSatelliteResource Include="..\VoiceToPaste\bin\$(Configuration)\$(TargetFramework)\$(VoiceToPasteRuntimeSubdirectory)pl\VoiceToPaste.resources.dll" />
+    </ItemGroup>
+
+    <!-- ProjectReference nie kopiuje satelity projektu WinExe do katalogu testów. -->
+    <Copy
+      SourceFiles="@(VoiceToPasteSatelliteResource)"
+      DestinationFolder="$(OutDir)pl"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

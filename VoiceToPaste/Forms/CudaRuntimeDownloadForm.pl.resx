@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="labelDescription.Text" xml:space="preserve"><value>Obsługa GPU wymaga pobrania bibliotek DLL NVIDIA.
+
+Do pobrania: około 397 MB.
+Miejsce na dysku: około 519 MB.</value></data>
+  <data name="toolStripStatusLabel.Text" xml:space="preserve"><value>Oczekiwanie na rozpoczęcie...</value></data>
+  <data name="statusStrip1.Text" xml:space="preserve"><value>statusStrip1</value></data>
+  <data name="btnDownload.Text" xml:space="preserve"><value>Pobierz</value></data>
+  <data name="$this.Text" xml:space="preserve"><value>Instalacja NVIDIA CUDA do obsługi GPU</value></data>
+</root>

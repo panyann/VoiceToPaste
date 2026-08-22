@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="VoiceToPaste.Tests/VoiceToPaste.Tests.csproj" />
+  <Project Path="VoiceToPaste/VoiceToPaste.csproj" />
+</Solution>
