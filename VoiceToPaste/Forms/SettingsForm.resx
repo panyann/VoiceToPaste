@@ -123,7 +123,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnTester.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 583</value>
+    <value>0, 603</value>
   </data>
   <data name="btnTester.Size" type="System.Drawing.Size, System.Drawing">
     <value>794, 46</value>
@@ -148,7 +148,7 @@
     <value>17</value>
   </data>
   <data name="comboBoxEngine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>371, 89</value>
+    <value>371, 139</value>
   </data>
   <data name="comboBoxEngine.Size" type="System.Drawing.Size, System.Drawing">
     <value>411, 40</value>
@@ -172,10 +172,10 @@
     <value>True</value>
   </data>
   <data name="labelEngine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 92</value>
+    <value>12, 142</value>
   </data>
   <data name="labelEngine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>204, 32</value>
+    <value>236, 32</value>
   </data>
   <data name="labelEngine.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -199,10 +199,10 @@
     <value>True</value>
   </data>
   <data name="labelLanguage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 138</value>
+    <value>12, 188</value>
   </data>
   <data name="labelLanguage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>204, 32</value>
+    <value>261, 32</value>
   </data>
   <data name="labelLanguage.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -223,7 +223,7 @@
     <value>13</value>
   </data>
   <data name="comboBoxLanguage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>371, 135</value>
+    <value>371, 185</value>
   </data>
   <data name="comboBoxLanguage.MaxDropDownItems" type="System.Int32, mscorlib">
     <value>15</value>
@@ -250,10 +250,10 @@
     <value>True</value>
   </data>
   <data name="checkBoxStartInTray.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 448</value>
+    <value>12, 482</value>
   </data>
   <data name="checkBoxStartInTray.Size" type="System.Drawing.Size, System.Drawing">
-    <value>700, 36</value>
+    <value>410, 36</value>
   </data>
   <data name="checkBoxStartInTray.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -277,10 +277,10 @@
     <value>True</value>
   </data>
   <data name="labelHotkey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 232</value>
+    <value>12, 282</value>
   </data>
   <data name="labelHotkey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 32</value>
+    <value>214, 32</value>
   </data>
   <data name="labelHotkey.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -301,7 +301,7 @@
     <value>11</value>
   </data>
   <data name="textBoxHotKey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>371, 229</value>
+    <value>371, 279</value>
   </data>
   <data name="textBoxHotKey.Size" type="System.Drawing.Size, System.Drawing">
     <value>411, 39</value>
@@ -322,7 +322,7 @@
     <value>10</value>
   </data>
   <data name="labelDescription.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 9</value>
+    <value>12, 59</value>
   </data>
   <data name="labelDescription.Size" type="System.Drawing.Size, System.Drawing">
     <value>756, 77</value>
@@ -349,10 +349,10 @@
     <value>True</value>
   </data>
   <data name="labelModel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 184</value>
+    <value>12, 234</value>
   </data>
   <data name="labelModel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>182, 32</value>
+    <value>181, 32</value>
   </data>
   <data name="labelModel.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -373,7 +373,7 @@
     <value>7</value>
   </data>
   <data name="comboBoxModel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>371, 183</value>
+    <value>371, 233</value>
   </data>
   <data name="comboBoxModel.MaxDropDownItems" type="System.Int32, mscorlib">
     <value>15</value>
@@ -397,7 +397,7 @@
     <value>8</value>
   </data>
   <data name="textBoxRecordLimit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>371, 274</value>
+    <value>371, 324</value>
   </data>
   <data name="textBoxRecordLimit.Size" type="System.Drawing.Size, System.Drawing">
     <value>314, 39</value>
@@ -424,10 +424,10 @@
     <value>True</value>
   </data>
   <data name="labelRecordLimit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 277</value>
+    <value>12, 327</value>
   </data>
   <data name="labelRecordLimit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 32</value>
+    <value>180, 32</value>
   </data>
   <data name="labelRecordLimit.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -454,7 +454,7 @@
     <value>691, 277</value>
   </data>
   <data name="labelSeconds.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 32</value>
+    <value>100, 32</value>
   </data>
   <data name="labelSeconds.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -478,7 +478,7 @@
     <value>Bottom</value>
   </data>
   <data name="btnKeyWords.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 537</value>
+    <value>0, 557</value>
   </data>
   <data name="btnKeyWords.Size" type="System.Drawing.Size, System.Drawing">
     <value>794, 46</value>
@@ -505,10 +505,10 @@
     <value>True</value>
   </data>
   <data name="checkBoxAutoStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 406</value>
+    <value>12, 440</value>
   </data>
   <data name="checkBoxAutoStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 36</value>
+    <value>250, 36</value>
   </data>
   <data name="checkBoxAutoStart.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -535,10 +535,10 @@
     <value>True</value>
   </data>
   <data name="labelUiLanguage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 322</value>
+    <value>12, 372</value>
   </data>
   <data name="labelUiLanguage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>105, 32</value>
+    <value>218, 32</value>
   </data>
   <data name="labelUiLanguage.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -559,7 +559,7 @@
     <value>0</value>
   </data>
   <data name="comboBoxUiLanguage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>371, 319</value>
+    <value>371, 369</value>
   </data>
   <data name="comboBoxUiLanguage.Size" type="System.Drawing.Size, System.Drawing">
     <value>411, 40</value>
@@ -579,6 +579,42 @@
   <data name="&gt;&gt;comboBoxUiLanguage.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <metadata name="menuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>268, 17</value>
+  </metadata>
+  <data name="menuItemAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 38</value>
+  </data>
+  <data name="menuItemAbout.Text" xml:space="preserve">
+    <value>About...</value>
+  </data>
+  <data name="menuStrip.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="menuStrip.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
+    <value>No</value>
+  </data>
+  <data name="menuStrip.Size" type="System.Drawing.Size, System.Drawing">
+    <value>794, 42</value>
+  </data>
+  <data name="menuStrip.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="menuStrip.Text" xml:space="preserve">
+    <value>menuStrip</value>
+  </data>
+  <data name="&gt;&gt;menuStrip.Name" xml:space="preserve">
+    <value>menuStrip</value>
+  </data>
+  <data name="&gt;&gt;menuStrip.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuStrip.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;menuStrip.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -586,7 +622,7 @@
     <value>13, 32</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>794, 629</value>
+    <value>794, 649</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6841,6 +6877,12 @@
   </data>
   <data name="&gt;&gt;toolTipAutoStart.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemAbout.Name" xml:space="preserve">
+    <value>menuItemAbout</value>
+  </data>
+  <data name="&gt;&gt;menuItemAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>SettingsForm</value>

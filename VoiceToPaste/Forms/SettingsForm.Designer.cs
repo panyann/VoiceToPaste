@@ -49,6 +49,9 @@
             toolTipAutoStart = new ToolTip(components);
             labelUiLanguage = new Label();
             comboBoxUiLanguage = new ComboBox();
+            menuStrip = new MenuStrip();
+            menuItemAbout = new ToolStripMenuItem();
+            menuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // btnTester
@@ -159,6 +162,20 @@
             resources.ApplyResources(comboBoxUiLanguage, "comboBoxUiLanguage");
             comboBoxUiLanguage.Name = "comboBoxUiLanguage";
             // 
+            // menuStrip
+            // 
+            menuStrip.ImageScalingSize = new Size(32, 32);
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuItemAbout });
+            resources.ApplyResources(menuStrip, "menuStrip");
+            menuStrip.Name = "menuStrip";
+            // 
+            // menuItemAbout
+            // 
+            menuItemAbout.Alignment = ToolStripItemAlignment.Right;
+            menuItemAbout.Name = "menuItemAbout";
+            resources.ApplyResources(menuItemAbout, "menuItemAbout");
+            menuItemAbout.Click += menuItemAbout_Click;
+            // 
             // SettingsForm
             // 
             resources.ApplyResources(this, "$this");
@@ -181,8 +198,12 @@
             Controls.Add(labelEngine);
             Controls.Add(comboBoxEngine);
             Controls.Add(btnTester);
+            Controls.Add(menuStrip);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            MainMenuStrip = menuStrip;
             Name = "SettingsForm";
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -208,5 +229,7 @@
         private ToolTip toolTipAutoStart;
         private Label labelUiLanguage;
         private ComboBox comboBoxUiLanguage;
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem menuItemAbout;
     }
 }

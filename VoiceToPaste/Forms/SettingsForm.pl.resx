@@ -17,5 +17,6 @@
   <data name="btnKeyWords.Text" xml:space="preserve"><value>Słowa kluczowe</value></data>
   <data name="checkBoxAutoStart.Text" xml:space="preserve"><value>Uruchamiaj razem z systemem</value></data>
   <data name="labelUiLanguage.Text" xml:space="preserve"><value>Język UI:</value></data>
+  <data name="menuItemAbout.Text" xml:space="preserve"><value>O programie...</value></data>
   <data name="$this.Text" xml:space="preserve"><value>VoiceToPaste - Ustawienia</value></data>
 </root>

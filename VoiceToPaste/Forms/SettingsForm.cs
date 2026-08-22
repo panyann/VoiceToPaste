@@ -733,5 +733,11 @@ namespace VoiceToPaste.Forms
             using var keyWordsForm = new KeyWordsForm(_settingsService, _settings);
             keyWordsForm.ShowDialog(this);
         }
+
+        private void menuItemAbout_Click(object sender, EventArgs e)
+        {
+            using var aboutForm = new AboutForm();
+            aboutForm.ShowDialog(this);
+        }
     }
 }

@@ -12,6 +12,7 @@
   <data name="ApplicationName" xml:space="preserve"><value>VoiceToPaste</value></data>
   <data name="ApplicationRestartFailed" xml:space="preserve"><value>Nie udało się ponownie uruchomić aplikacji: {0}</value></data>
   <data name="ApplicationTitle" xml:space="preserve"><value>VoiceToPaste</value></data>
+  <data name="ExternalLinkOpenFailed" xml:space="preserve"><value>Nie udało się otworzyć linku w domyślnej przeglądarce.</value></data>
 
   <!-- Autostart -->
 

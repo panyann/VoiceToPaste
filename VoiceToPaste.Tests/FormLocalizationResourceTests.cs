@@ -14,6 +14,7 @@ namespace VoiceToPaste.Tests
             typeof(KeyWordsForm),
             typeof(WhisperModelDownloadForm),
             typeof(CudaRuntimeDownloadForm),
+            typeof(AboutForm),
         ];
 
         private static readonly HashSet<string> LayoutPropertyNames = new(StringComparer.Ordinal)
@@ -82,10 +83,13 @@ namespace VoiceToPaste.Tests
 
         [Theory]
         [InlineData(typeof(SettingsForm), "labelUiLanguage.Text", "Język UI:")]
+        [InlineData(typeof(SettingsForm), "menuItemAbout.Text", "O programie...")]
         [InlineData(typeof(TesterForm), "$this.Text", "Tester transkrypcji")]
         [InlineData(typeof(KeyWordsForm), "btnSave.Text", "Zapisz zmiany")]
         [InlineData(typeof(WhisperModelDownloadForm), "$this.Text", "Pobieranie modelu Whisper")]
         [InlineData(typeof(CudaRuntimeDownloadForm), "$this.Text", "Instalacja NVIDIA CUDA do obsługi GPU")]
+        [InlineData(typeof(AboutForm), "$this.Text", "O VoiceToPaste")]
+        [InlineData(typeof(AboutForm), "labelDonate.Text", "Wesprzyj projekt:")]
         public void PolishResources_ReturnExpectedText(Type formType, string resourceName, string expected)
         {
             var resources = new ComponentResourceManager(formType);
