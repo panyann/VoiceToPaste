@@ -1,8 +1,9 @@
-﻿using System;
+﻿using DarkModeForms;
+using Serilog;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Serilog;
 using VoiceToPaste.Resources;
 
 namespace VoiceToPaste.Forms
@@ -11,11 +12,19 @@ namespace VoiceToPaste.Forms
     {
         private static readonly ILogger Logger = Log.ForContext<AboutForm>();
 
+        private DarkModeCS dm = null;
+
         public AboutForm()
         {
             InitializeComponent();
             ApplyLocalizedResources();
             label1.Text = GetApplicationVersion();
+
+            dm = new DarkModeCS(this)
+            {
+                //[Optional] Choose your preferred color mode here:
+                ColorMode = DarkModeCS.DisplayMode.SystemDefault
+            };
         }
 
         private void ApplyLocalizedResources()

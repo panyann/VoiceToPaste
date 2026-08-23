@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using DarkModeForms;
+using Serilog;
 using VoiceToPaste.Resources;
 using VoiceToPaste.Services;
 
@@ -12,9 +13,16 @@ namespace VoiceToPaste.Forms
         private bool _isDownloading;
         private bool _closeAfterCancellation;
 
+        private DarkModeCS dm = null;
+
         public CudaRuntimeDownloadForm()
             : this(new CudaRuntimeService())
         {
+            dm = new DarkModeCS(this)
+            {
+                //[Optional] Choose your preferred color mode here:
+                ColorMode = DarkModeCS.DisplayMode.SystemDefault
+            };
         }
 
         internal CudaRuntimeDownloadForm(CudaRuntimeService cudaRuntimeService)

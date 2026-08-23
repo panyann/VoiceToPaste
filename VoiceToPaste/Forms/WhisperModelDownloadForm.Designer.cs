@@ -73,6 +73,8 @@
             Controls.Add(statusStrip1);
             Controls.Add(progressBarDownload);
             Controls.Add(labelDescription);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "WhisperModelDownloadForm";
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();

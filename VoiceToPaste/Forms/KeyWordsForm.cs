@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DarkModeForms;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,7 +8,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Serilog;
 using VoiceToPaste.Models;
 using VoiceToPaste.Resources;
 using VoiceToPaste.Services;
@@ -27,6 +28,8 @@ namespace VoiceToPaste.Forms
         private readonly System.Windows.Forms.Timer _saveStatusTimer = new() { Interval = 2000 };
         private bool _loading;
         private bool _isDirty;
+
+        private DarkModeCS dm = null;
 
         public KeyWordsForm(SettingsService settingsService)
         {
@@ -51,6 +54,12 @@ namespace VoiceToPaste.Forms
             bindingSource.ListChanged += BindingSource_ListChanged;
             FormClosing += KeyWordsForm_FormClosing;
             _saveStatusTimer.Tick += SaveStatusTimer_Tick;
+
+            dm = new DarkModeCS(this)
+            {
+                //[Optional] Choose your preferred color mode here:
+                ColorMode = DarkModeCS.DisplayMode.SystemDefault
+            };
         }
 
         private void DataGridView_CellValueChanged(object? sender, DataGridViewCellEventArgs e)

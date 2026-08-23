@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using DarkModeForms;
+using Serilog;
 using VoiceToPaste.Models;
 using VoiceToPaste.Resources;
 using VoiceToPaste.Services;
@@ -27,6 +28,8 @@ namespace VoiceToPaste.Forms
         public event Action<int>? RecordingLimitChanged;
         public event Action? RestartRequested;
 
+        private DarkModeCS dm = null;
+
         public SettingsForm(
             SettingsService settingsService,
             AutoStartTaskService autoStartTaskService)
@@ -44,6 +47,12 @@ namespace VoiceToPaste.Forms
             ApplySettingsToControls();
             InitializeRecordingLimitControls();
             _hotkeyCapture = CreateHotkeyCapture();
+
+            dm = new DarkModeCS(this)
+            {
+                //[Optional] Choose your preferred color mode here:
+                ColorMode = DarkModeCS.DisplayMode.SystemDefault
+            };
         }
 
         // Numer wersji zawiera metadane commitu po '+'; w tytule pokazujemy sam numer wersji.

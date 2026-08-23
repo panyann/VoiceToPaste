@@ -1,3 +1,4 @@
+using DarkModeForms;
 using Serilog;
 using VoiceToPaste.Models;
 using VoiceToPaste.Resources;
@@ -15,10 +16,17 @@ namespace VoiceToPaste.Forms
         private bool _isDownloading;
         private bool _closeAfterCancellation;
 
+        private DarkModeCS dm = null;
+
         /// <summary>Konstruktor wymagany przez WinForms Designer.</summary>
         public WhisperModelDownloadForm()
             : this(WhisperModelCatalog.GetById(WhisperModelCatalog.DefaultModelId), new WhisperModelDownloadService())
         {
+            dm = new DarkModeCS(this)
+            {
+                //[Optional] Choose your preferred color mode here:
+                ColorMode = DarkModeCS.DisplayMode.SystemDefault
+            };
         }
 
         internal WhisperModelDownloadForm(WhisperModel model, WhisperModelDownloadService downloadService)
@@ -37,6 +45,12 @@ namespace VoiceToPaste.Forms
             toolStripStatusLabel.Text = UiStrings.Get("DownloadWaitingToStart");
             btnDownload.Click += btnDownload_Click;
             FormClosing += WhisperModelDownloadForm_FormClosing;
+
+            dm = new DarkModeCS(this)
+            {
+                //[Optional] Choose your preferred color mode here:
+                ColorMode = DarkModeCS.DisplayMode.SystemDefault
+            };
         }
 
         /// <summary>Pobiera tylko model przekazany podczas utworzenia formularza.</summary>

@@ -60,6 +60,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Style\" />
+  </ItemGroup>
+
   <Target Name="RemoveUnsupportedWhisperRuntimeLibraries" AfterTargets="Publish">
     <ItemGroup>
       <!-- Pakiet CPU dodaje wszystkie architektury Windows, ale publikujemy tylko win-x64. -->
