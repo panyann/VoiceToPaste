@@ -29,22 +29,20 @@ namespace VoiceToPaste
 
         public TrayApplicationContext(
             SettingsService settingsService,
-            AppSettings settings,
             TranscriptionService transcriptionService,
             AutoStartTaskService autoStartTaskService,
             bool showSettingsAtStartup = false)
         {
             _settingsService = settingsService;
             _autoStartTaskService = autoStartTaskService;
-            _settings = settings;
+            _settings = settingsService.Settings;
             _dictationController = new DictationController(
                 transcriptionService,
-                _settings.RecordingLimitSeconds,
                 _settings);
             _dictationController.StateChanged += DictationController_StateChanged;
             _dictationController.ErrorOccurred += DictationController_ErrorOccurred;
 
-            _settingsForm = new SettingsForm(settingsService, settings, autoStartTaskService);
+            _settingsForm = new SettingsForm(settingsService, autoStartTaskService);
             _settingsForm.Resize += SettingsForm_Resize;
             _settingsForm.FormClosed += SettingsForm_FormClosed;
             _settingsForm.TesterVisibilityChanged += _dictationController.SetActivationsSuspended;
@@ -189,7 +187,7 @@ namespace VoiceToPaste
             _settings.Hotkey = hotkey;
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
                 _notifyIcon.Text = GetIdleTooltip();
                 return null;
             }

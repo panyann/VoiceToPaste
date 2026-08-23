@@ -95,7 +95,6 @@ namespace VoiceToPaste
                 Log.Information("Starting the WinForms message loop with backend {Backend}.", preloadBackend);
                 using var applicationContext = new TrayApplicationContext(
                     settingsService,
-                    settings,
                     transcriptionService,
                     autoStartTaskService,
                     showSettingsAtStartup: !isSelectedModelAvailable);

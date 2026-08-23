@@ -28,15 +28,15 @@ namespace VoiceToPaste.Forms
         private bool _loading;
         private bool _isDirty;
 
-        public KeyWordsForm(SettingsService settingsService, AppSettings settings)
+        public KeyWordsForm(SettingsService settingsService)
         {
             _settingsService = settingsService;
-            _settings = settings;
+            _settings = settingsService.Settings;
             InitializeComponent();
 
             // Kopia elementów, aby edycja w siatce nie modyfikowała wspólnych ustawień przed zapisem.
             _keywords = new BindingList<DGV_KeyWords>(
-                settings.KeyWords.Select(k => new DGV_KeyWords { Key = k.Key, Word = k.Word }).ToList())
+                _settings.KeyWords.Select(k => new DGV_KeyWords { Key = k.Key, Word = k.Word }).ToList())
             {
                 AllowNew = true,
             };
@@ -117,7 +117,7 @@ namespace VoiceToPaste.Forms
             _settings.KeyWords = normalized;
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
             }
             catch (Exception ex)
             {

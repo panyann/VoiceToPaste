@@ -1,4 +1,5 @@
 using VoiceToPaste.Models;
+using VoiceToPaste.Resources;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -15,6 +16,7 @@ namespace VoiceToPaste.Services
     {
         private static readonly ILogger Logger = Log.ForContext<SettingsService>();
         private const string SettingsFileName = "settings.yaml";
+        private AppSettings? _settings;
 
         public SettingsService()
             : this(ApplicationPaths.Directory)
@@ -32,8 +34,32 @@ namespace VoiceToPaste.Services
         /// <summary>Komunikat diagnostyczny z ostatniego odczytu; null, gdy odczyt był czysty.</summary>
         public string? LastLoadDiagnostic { get; private set; }
 
+        /// <summary>
+        /// Wspólne ustawienia całego procesu — jedna instancja mutowana na żywo przez
+        /// konsumentów i zrzucana na dysk bezparametrowym Save. Rzuca przed pierwszym
+        /// Load, bo ciche wartości domyślne byłyby gorsze niż jawny błąd.
+        /// </summary>
+        public AppSettings Settings
+        {
+            get
+            {
+                if (_settings == null)
+                    throw LocalizedExceptionFactory.InvalidOperation("SettingsNotLoaded");
+
+                return _settings;
+            }
+        }
+
+        /// <summary>
+        /// Odczytuje ustawienia z dysku dokładnie raz na proces. Drugie wywołanie rzuca
+        /// wyjątek, bo podmieniłoby instancję i osierociło referencje pobrane wcześniej
+        /// przez konsumentów.
+        /// </summary>
         public AppSettings Load()
         {
+            if (_settings != null)
+                throw LocalizedExceptionFactory.InvalidOperation("SettingsAlreadyLoaded");
+
             Logger.Information("Starting settings load.");
             LastLoadDiagnostic = null;
 
@@ -54,6 +80,9 @@ namespace VoiceToPaste.Services
                     Logger.Warning("Settings file is empty. Default values will be restored.");
                     return RestoreDefaults("Plik settings.yaml był pusty — przywrócono ustawienia domyślne.");
                 }
+
+                // Instancja musi być dostępna przez Settings zanim ruszy ewentualny zapis naprawczy.
+                _settings = settings;
 
                 var repairs = new List<string>();
 
@@ -106,7 +135,7 @@ namespace VoiceToPaste.Services
                 }
 
                 if (repairs.Count > 0)
-                    RepairSettings(settings, string.Join(" ", repairs));
+                    RepairSettings(string.Join(" ", repairs));
 
                 Logger.Information("Loaded settings with backend {Backend}.", settings.TranscriptionEngine);
                 return settings;
@@ -120,11 +149,13 @@ namespace VoiceToPaste.Services
         }
 
         /// <summary>
-        /// Zapisuje ustawienia atomowo: najpierw plik tymczasowy obok, potem jego podmiana
-        /// za właściwy plik. Awaria w połowie zapisu nie zostawi więc uciętego settings.yaml.
+        /// Zapisuje bieżące Settings atomowo: najpierw plik tymczasowy obok, potem jego
+        /// podmiana za właściwy plik. Awaria w połowie zapisu nie zostawi więc uciętego
+        /// settings.yaml.
         /// </summary>
-        public void Save(AppSettings settings)
+        public void Save()
         {
+            var settings = Settings;
             Logger.Information("Saving settings with backend {Backend}.", settings.TranscriptionEngine);
             try
             {
@@ -153,16 +184,17 @@ namespace VoiceToPaste.Services
         {
             var defaults = new AppSettings();
 
-            RepairSettings(defaults, diagnostic);
+            _settings = defaults;
+            RepairSettings(diagnostic);
             return defaults;
         }
 
-        private void RepairSettings(AppSettings settings, string diagnostic)
+        private void RepairSettings(string diagnostic)
         {
             try
             {
                 Logger.Information("Saving repaired settings.");
-                Save(settings);
+                Save();
                 LastLoadDiagnostic = diagnostic;
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)

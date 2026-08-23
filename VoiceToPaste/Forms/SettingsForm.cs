@@ -33,13 +33,12 @@ namespace VoiceToPaste.Forms
 
         public SettingsForm(
             SettingsService settingsService,
-            AppSettings settings,
             AutoStartTaskService autoStartTaskService)
         {
             _settingsService = settingsService;
             _autoStartTaskService = autoStartTaskService;
-            _settings = settings;
-            _whisperEngineChangeWorkflow = new WhisperEngineChangeWorkflow(_settings, _settingsService);
+            _settings = settingsService.Settings;
+            _whisperEngineChangeWorkflow = new WhisperEngineChangeWorkflow(_settingsService);
             InitializeComponent();
             var productVersion = Application.ProductVersion;
             var metadataSeparatorIndex = productVersion.IndexOf('+');
@@ -209,7 +208,7 @@ namespace VoiceToPaste.Forms
             _settings.WhisperModelId = selectedModel?.Id;
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
                 Logger.Information("Saved the Whisper model selection {ModelId}. Restarting the application.", selectedModel?.Id ?? "not selected");
                 RestartRequested?.Invoke();
             }
@@ -295,7 +294,7 @@ namespace VoiceToPaste.Forms
 
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
                 TranscriptionService.Instance.SetLanguage(selectedLanguage);
                 Logger.Information("Saved the transcription language selection {Language}.", selectedLanguage);
             }
@@ -336,7 +335,7 @@ namespace VoiceToPaste.Forms
 
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
                 Logger.Information("Saved the interface language {Language}. Restarting the application.", selectedLanguage);
                 RestartRequested?.Invoke();
             }
@@ -365,7 +364,7 @@ namespace VoiceToPaste.Forms
 
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
                 Logger.Information("Saved the start-in-tray setting: {StartInTray}.", startInTray);
             }
             catch (Exception ex)
@@ -402,7 +401,7 @@ namespace VoiceToPaste.Forms
                 taskUpdated = true;
 
                 _settings.AutoStart = autoStart;
-                _settingsService.Save(_settings);
+                _settingsService.Save();
                 Logger.Information("Saved the autostart setting: {AutoStart}.", autoStart);
             }
             catch (Exception ex)
@@ -694,7 +693,7 @@ namespace VoiceToPaste.Forms
             _settings.RecordingLimitSeconds = recordingLimitSeconds;
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
             }
             catch (Exception ex)
             {
@@ -730,7 +729,7 @@ namespace VoiceToPaste.Forms
 
         private void btnKeyWords_Click(object sender, EventArgs e)
         {
-            using var keyWordsForm = new KeyWordsForm(_settingsService, _settings);
+            using var keyWordsForm = new KeyWordsForm(_settingsService);
             keyWordsForm.ShowDialog(this);
         }
 

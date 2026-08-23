@@ -296,21 +296,21 @@ namespace VoiceToPaste.Tests
         public void Save_ThenLoad_RoundTripsSettings()
         {
             var service = CreateService();
-            service.Save(new AppSettings
+            service.Load();
+            var settings = service.Settings;
+            settings.TranscriptionEngine = TranscriptionBackend.Gpu;
+            settings.WhisperModelId = "medium";
+            settings.TranscribeLanguage = "en";
+            settings.UiLanguage = "pl";
+            settings.StartInTray = true;
+            settings.AutoStart = true;
+            settings.RecordingLimitSeconds = 120;
+            settings.Hotkey = new HotkeyGesture
             {
-                TranscriptionEngine = TranscriptionBackend.Gpu,
-                WhisperModelId = "medium",
-                TranscribeLanguage = "en",
-                UiLanguage = "pl",
-                StartInTray = true,
-                AutoStart = true,
-                RecordingLimitSeconds = 120,
-                Hotkey = new HotkeyGesture
-                {
-                    Key = "F12",
-                    Modifiers = [HotkeyModifier.Control, HotkeyModifier.Shift],
-                },
-            });
+                Key = "F12",
+                Modifiers = [HotkeyModifier.Control, HotkeyModifier.Shift],
+            };
+            service.Save();
 
             // Świeża instancja serwisu — udowadniamy, że dane siedzą w pliku, nie w pamięci.
             var reloaded = CreateService().Load();
@@ -361,14 +361,13 @@ namespace VoiceToPaste.Tests
         public void Save_ThenLoad_RoundTripsKeyWords()
         {
             var service = CreateService();
-            service.Save(new AppSettings
-            {
-                KeyWords =
-                [
-                    new DGV_KeyWords { Key = "plik agent", Word = "AGENTS.md" },
-                    new DGV_KeyWords { Key = "voice to paste", Word = "VoiceToPaste" },
-                ],
-            });
+            service.Load();
+            service.Settings.KeyWords =
+            [
+                new DGV_KeyWords { Key = "plik agent", Word = "AGENTS.md" },
+                new DGV_KeyWords { Key = "voice to paste", Word = "VoiceToPaste" },
+            ];
+            service.Save();
 
             // Świeża instancja serwisu — udowadniamy, że dane siedzą w pliku, nie w pamięci.
             var reloaded = CreateService().Load();
@@ -385,10 +384,36 @@ namespace VoiceToPaste.Tests
         public void Save_DoesNotLeaveTempFile()
         {
             var service = CreateService();
+            service.Load();
 
-            service.Save(new AppSettings());
+            service.Save();
 
             Assert.False(File.Exists(service.SettingsPath + ".tmp"));
+        }
+
+        [Fact]
+        public void Settings_BeforeLoad_Throws()
+        {
+            var service = CreateService();
+
+            Assert.Throws<InvalidOperationException>(() => service.Settings);
+        }
+
+        [Fact]
+        public void Save_BeforeLoad_Throws()
+        {
+            var service = CreateService();
+
+            Assert.Throws<InvalidOperationException>(() => service.Save());
+        }
+
+        [Fact]
+        public void Load_CalledTwice_Throws()
+        {
+            var service = CreateService();
+            service.Load();
+
+            Assert.Throws<InvalidOperationException>(() => service.Load());
         }
     }
 }

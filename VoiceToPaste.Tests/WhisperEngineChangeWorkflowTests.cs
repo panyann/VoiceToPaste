@@ -22,14 +22,21 @@ namespace VoiceToPaste.Tests
             Directory.Delete(_tempDirectory, recursive: true);
         }
 
-        private WhisperEngineChangeWorkflow CreateWorkflow(AppSettings settings) =>
-            new(settings, new SettingsService(_tempDirectory));
+        private SettingsService CreateLoadedService(TranscriptionBackend initialEngine)
+        {
+            var service = new SettingsService(_tempDirectory);
+            service.Load();
+            service.Settings.TranscriptionEngine = initialEngine;
+            return service;
+        }
+
+        private WhisperEngineChangeWorkflow CreateWorkflow(TranscriptionBackend initialEngine) =>
+            new(CreateLoadedService(initialEngine));
 
         [Fact]
         public void EvaluateChange_SameEngine_ReturnsNoChange()
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Auto };
-            var workflow = CreateWorkflow(settings);
+            var workflow = CreateWorkflow(TranscriptionBackend.Auto);
 
             var step = workflow.EvaluateChange(TranscriptionBackend.Auto, cudaInstalled: false);
 
@@ -39,8 +46,7 @@ namespace VoiceToPaste.Tests
         [Fact]
         public void EvaluateChange_GpuWithoutCuda_ReturnsRequiresCudaInstall()
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Cpu };
-            var workflow = CreateWorkflow(settings);
+            var workflow = CreateWorkflow(TranscriptionBackend.Cpu);
 
             var step = workflow.EvaluateChange(TranscriptionBackend.Gpu, cudaInstalled: false);
 
@@ -50,8 +56,7 @@ namespace VoiceToPaste.Tests
         [Fact]
         public void EvaluateChange_GpuWithCuda_ReturnsReadyToSave()
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Cpu };
-            var workflow = CreateWorkflow(settings);
+            var workflow = CreateWorkflow(TranscriptionBackend.Cpu);
 
             var step = workflow.EvaluateChange(TranscriptionBackend.Gpu, cudaInstalled: true);
 
@@ -63,8 +68,7 @@ namespace VoiceToPaste.Tests
         [InlineData(TranscriptionBackend.Cpu)]
         public void EvaluateChange_NonGpuEngine_IgnoresCudaState(TranscriptionBackend selectedEngine)
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Gpu };
-            var workflow = CreateWorkflow(settings);
+            var workflow = CreateWorkflow(TranscriptionBackend.Gpu);
 
             var step = workflow.EvaluateChange(selectedEngine, cudaInstalled: false);
 
@@ -72,26 +76,27 @@ namespace VoiceToPaste.Tests
         }
 
         [Fact]
-        public void EvaluateChange_DoesNotMutateSettingsOrCreateFile()
+        public void EvaluateChange_DoesNotMutateSettingsOrWriteFile()
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Cpu };
-            var workflow = CreateWorkflow(settings);
+            var service = CreateLoadedService(TranscriptionBackend.Cpu);
+            var workflow = new WhisperEngineChangeWorkflow(service);
+            var yamlBefore = File.ReadAllText(service.SettingsPath);
 
             workflow.EvaluateChange(TranscriptionBackend.Gpu, cudaInstalled: false);
 
-            Assert.Equal(TranscriptionBackend.Cpu, settings.TranscriptionEngine);
-            Assert.False(File.Exists(Path.Combine(_tempDirectory, "settings.yaml")));
+            Assert.Equal(TranscriptionBackend.Cpu, service.Settings.TranscriptionEngine);
+            Assert.Equal(yamlBefore, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
         public void SaveChange_PersistsEngineToSettingsFile()
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Cpu };
-            var workflow = CreateWorkflow(settings);
+            var service = CreateLoadedService(TranscriptionBackend.Cpu);
+            var workflow = new WhisperEngineChangeWorkflow(service);
 
             workflow.SaveChange(TranscriptionBackend.Gpu);
 
-            Assert.Equal(TranscriptionBackend.Gpu, settings.TranscriptionEngine);
+            Assert.Equal(TranscriptionBackend.Gpu, service.Settings.TranscriptionEngine);
             // Świeża instancja serwisu — udowadniamy, że silnik siedzi w pliku, nie w pamięci.
             var reloaded = new SettingsService(_tempDirectory).Load();
             Assert.Equal(TranscriptionBackend.Gpu, reloaded.TranscriptionEngine);
@@ -100,8 +105,8 @@ namespace VoiceToPaste.Tests
         [Fact]
         public void SaveChange_AfterCudaInstall_CompletesTheFormFlow()
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Cpu };
-            var workflow = CreateWorkflow(settings);
+            var service = CreateLoadedService(TranscriptionBackend.Cpu);
+            var workflow = new WhisperEngineChangeWorkflow(service);
 
             var step = workflow.EvaluateChange(TranscriptionBackend.Gpu, cudaInstalled: false);
             Assert.Equal(WhisperEngineChangeStep.RequiresCudaInstall, step);
@@ -109,21 +114,22 @@ namespace VoiceToPaste.Tests
             // Formularz instaluje CUDA i dopiero wtedy zapisuje zmianę silnika.
             workflow.SaveChange(TranscriptionBackend.Gpu);
 
-            Assert.Equal(TranscriptionBackend.Gpu, settings.TranscriptionEngine);
+            Assert.Equal(TranscriptionBackend.Gpu, service.Settings.TranscriptionEngine);
         }
 
         [Fact]
         public void SaveChange_SaveFails_RollsBackEngineAndRethrows()
         {
-            var settings = new AppSettings { TranscriptionEngine = TranscriptionBackend.Cpu };
             var service = new SettingsService(_tempDirectory);
             // Katalog w miejscu pliku tymczasowego deterministycznie wywala zapis atomowy.
             Directory.CreateDirectory(service.SettingsPath + ".tmp");
-            var workflow = new WhisperEngineChangeWorkflow(settings, service);
+            service.Load();
+            service.Settings.TranscriptionEngine = TranscriptionBackend.Cpu;
+            var workflow = new WhisperEngineChangeWorkflow(service);
 
             Assert.Throws<UnauthorizedAccessException>(() => workflow.SaveChange(TranscriptionBackend.Gpu));
 
-            Assert.Equal(TranscriptionBackend.Cpu, settings.TranscriptionEngine);
+            Assert.Equal(TranscriptionBackend.Cpu, service.Settings.TranscriptionEngine);
         }
     }
 }

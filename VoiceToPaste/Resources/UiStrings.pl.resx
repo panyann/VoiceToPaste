@@ -80,6 +80,8 @@
 
   <!-- Ustawienia i kontrola integralności -->
 
+  <data name="SettingsAlreadyLoaded" xml:space="preserve"><value>Ustawienia zostały już wczytane i nie można wczytać ich ponownie.</value></data>
+  <data name="SettingsNotLoaded" xml:space="preserve"><value>Ustawienia nie zostały jeszcze wczytane.</value></data>
   <data name="SettingsSaveFailed" xml:space="preserve"><value>Nie udało się zapisać ustawień: {0}</value></data>
   <data name="SettingsWindowTitleWithVersion" xml:space="preserve"><value>{0} - v{1}</value></data>
   <data name="Sha256LengthInvalid" xml:space="preserve"><value>Suma SHA-256 musi mieć dokładnie 32 bajty.</value></data>

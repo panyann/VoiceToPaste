@@ -28,12 +28,11 @@ namespace VoiceToPaste.Services
 
         public DictationController(
             TranscriptionService transcriptionService,
-            int recordingLimitSeconds,
             AppSettings settings)
         {
             _transcriptionService = transcriptionService;
             _settings = settings;
-            SetRecordingLimit(recordingLimitSeconds);
+            SetRecordingLimit(settings.RecordingLimitSeconds);
         }
 
         public event Action<DictationState>? StateChanged;

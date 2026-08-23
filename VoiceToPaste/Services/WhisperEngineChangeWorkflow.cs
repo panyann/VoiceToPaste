@@ -27,13 +27,12 @@ namespace VoiceToPaste.Services
         private readonly AppSettings _settings;
         private readonly SettingsService _settingsService;
 
-        internal WhisperEngineChangeWorkflow(AppSettings settings, SettingsService settingsService)
+        internal WhisperEngineChangeWorkflow(SettingsService settingsService)
         {
-            ArgumentNullException.ThrowIfNull(settings);
             ArgumentNullException.ThrowIfNull(settingsService);
 
-            _settings = settings;
             _settingsService = settingsService;
+            _settings = settingsService.Settings;
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace VoiceToPaste.Services
             _settings.TranscriptionEngine = selectedEngine;
             try
             {
-                _settingsService.Save(_settings);
+                _settingsService.Save();
             }
             catch
             {
