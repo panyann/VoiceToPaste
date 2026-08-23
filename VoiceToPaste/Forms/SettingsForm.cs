@@ -11,6 +11,7 @@ namespace VoiceToPaste.Forms
         private readonly SettingsService _settingsService;
         private readonly AutoStartTaskService _autoStartTaskService;
         private readonly CudaRuntimeService _cudaRuntimeService = new();
+        private readonly WhisperEngineChangeWorkflow _whisperEngineChangeWorkflow;
         private readonly WhisperModelDownloadService _modelDownloadService = new();
         private readonly AppSettings _settings;
         private readonly HotkeyCaptureController _hotkeyCapture;
@@ -38,6 +39,7 @@ namespace VoiceToPaste.Forms
             _settingsService = settingsService;
             _autoStartTaskService = autoStartTaskService;
             _settings = settings;
+            _whisperEngineChangeWorkflow = new WhisperEngineChangeWorkflow(_settings, _settingsService);
             InitializeComponent();
             var productVersion = Application.ProductVersion;
             var metadataSeparatorIndex = productVersion.IndexOf('+');
@@ -230,34 +232,43 @@ namespace VoiceToPaste.Forms
             if (_changingEngineSelection)
                 return;
 
-            var selectedBackend = SelectedBackend;
-            if (_settings.TranscriptionEngine == selectedBackend)
+            var selectedEngine = SelectedBackend;
+            var previousEngine = _settings.TranscriptionEngine;
+            var step = _whisperEngineChangeWorkflow.EvaluateChange(selectedEngine, _cudaRuntimeService.IsRuntimeInstalled());
+            if (step == WhisperEngineChangeStep.NoChange)
                 return;
 
-            var previousBackend = _settings.TranscriptionEngine;
-            Logger.Information("The user is changing the backend from {PreviousBackend} to {SelectedBackend}.", previousBackend, selectedBackend);
+            Logger.Information("The user is changing the Whisper engine from {PreviousEngine} to {SelectedEngine}.", previousEngine, selectedEngine);
 
-            if (selectedBackend == TranscriptionBackend.Gpu && !EnsureCudaRuntimeInstalled())
+            // ReadyToSave means CUDA is already available, so the engine can be persisted directly.
+            var saveAllowed = step == WhisperEngineChangeStep.ReadyToSave;
+            if (step == WhisperEngineChangeStep.RequiresCudaInstall)
             {
-                Logger.Information("The backend change to GPU was reverted because CUDA was not installed.");
-                RestoreSelectedBackend(previousBackend);
-                return;
+                var cudaInstalled = InstallCudaRuntime();
+                if (!cudaInstalled)
+                {
+                    Logger.Information("The Whisper engine change was reverted because CUDA installation was not completed.");
+                    RestoreSelectedBackend(previousEngine);
+                    return;
+                }
+
+                saveAllowed = true;
             }
 
-            _settings.TranscriptionEngine = selectedBackend;
+            if (!saveAllowed)
+                return;
 
             try
             {
-                _settingsService.Save(_settings);
-                Logger.Information("Saved the backend selection {Backend}. Restarting the application.", selectedBackend);
+                _whisperEngineChangeWorkflow.SaveChange(selectedEngine);
+                Logger.Information("Restarting the application.");
                 RestartRequested?.Invoke();
             }
             catch (Exception ex)
             {
-                // Zmieniamy z powrotem widok i model, żeby UI nie sugerowało zapisu, który się nie udał.
-                _settings.TranscriptionEngine = previousBackend;
-                RestoreSelectedBackend(previousBackend);
-                Logger.Error(ex, "Failed to save the backend selection.");
+                // The workflow has already restored the in-memory engine; restore the view as well.
+                RestoreSelectedBackend(previousEngine);
+                Logger.Error(ex, "Failed to save the Whisper engine selection.");
                 MessageBox.Show(
                     this,
                     UiStrings.Format("SettingsSaveFailed", LocalizedExceptionFactory.GetUserMessage(ex)),
@@ -439,24 +450,23 @@ namespace VoiceToPaste.Forms
             Logger.Information("The settings window was opened.");
             // Ustawienie mogło zostać zapisane przed aktualizacją aplikacji. Wtedy preload
             // bezpiecznie używa CPU, a użytkownik nadal może świadomie pobrać runtime CUDA.
-            if (_settings.TranscriptionEngine == TranscriptionBackend.Gpu && !_cudaRuntimeService.IsRuntimeInstalled())
-            {
-                if (EnsureCudaRuntimeInstalled())
-                {
-                    Logger.Information("CUDA was installed for the existing GPU setting. Restarting the application.");
-                    RestartRequested?.Invoke();
-                }
-            }
+            if (_settings.TranscriptionEngine != TranscriptionBackend.Gpu)
+                return;
 
+            if (_cudaRuntimeService.IsRuntimeInstalled())
+                return;
+
+            if (!InstallCudaRuntime())
+                return;
+
+            Logger.Information("CUDA was installed for the existing GPU setting. Restarting the application.");
+            RestartRequested?.Invoke();
         }
 
-        private bool EnsureCudaRuntimeInstalled()
+        private bool InstallCudaRuntime()
         {
-            if (_cudaRuntimeService.IsRuntimeInstalled())
-                return true;
-
             Logger.Information("Opening the CUDA installation window.");
-            using var downloadForm = new CudaRuntimeDownloadForm();
+            using var downloadForm = new CudaRuntimeDownloadForm(_cudaRuntimeService);
             var installed = downloadForm.ShowDialog(this) == DialogResult.OK;
             Logger.Information("The CUDA installation window was closed. Success: {Installed}.", installed);
             return installed;

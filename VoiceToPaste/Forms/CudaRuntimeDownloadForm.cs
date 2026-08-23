@@ -29,8 +29,6 @@ namespace VoiceToPaste.Forms
                 FormatMegabytes(missingDownloadSize),
                 519);
             toolStripStatusLabel.Text = UiStrings.Get("DownloadWaitingToStart");
-            btnDownload.Click += btnDownload_Click;
-            FormClosing += CudaRuntimeDownloadForm_FormClosing;
         }
 
         /// <summary>Pobiera CUDA wyłącznie po świadomym kliknięciu użytkownika.</summary>

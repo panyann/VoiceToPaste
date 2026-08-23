@@ -219,6 +219,9 @@ Idle → Recording → Transcribing → Idle
 - Reuse a form instance or dispose it correctly. Repeatedly showing Settings must not
   create hidden duplicate forms.
 - Modal tester, editor, and download forms must release their owned resources.
+- Only forms decide when to open windows and dialogs and when to request an application
+  restart. Services and workflows return plain results and never hide such UI side
+  effects behind delegates.
 
 ## Resource lifetime and error handling
 
@@ -270,6 +273,10 @@ Idle → Recording → Transcribing → Idle
 Prioritize automated tests for state, settings, localization, validation, integrity
 checks, and data processing. Do not build extensive UI test infrastructure for simple
 form property assignments.
+
+Never let test convenience dictate production design. If tests would require hidden
+delegates or side effects in services, test the clean code through its concrete
+dependencies instead.
 
 Important automated coverage includes:
 

@@ -117,17 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="labelDescription.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="labelDescription.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 9</value>
   </data>
   <data name="labelDescription.Size" type="System.Drawing.Size, System.Drawing">
-    <value>586, 128</value>
+    <value>776, 295</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="labelDescription.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
@@ -171,7 +168,7 @@
     <value>17, 17</value>
   </metadata>
   <data name="toolStripStatusLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 32</value>
+    <value>192, 32</value>
   </data>
   <data name="toolStripStatusLabel.Text" xml:space="preserve">
     <value>Waiting to start...</value>

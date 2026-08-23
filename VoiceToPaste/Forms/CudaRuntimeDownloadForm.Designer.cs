@@ -64,6 +64,7 @@
             resources.ApplyResources(btnDownload, "btnDownload");
             btnDownload.Name = "btnDownload";
             btnDownload.UseVisualStyleBackColor = true;
+            btnDownload.Click += btnDownload_Click;
             // 
             // CudaRuntimeDownloadForm
             // 
@@ -76,6 +77,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "CudaRuntimeDownloadForm";
+            FormClosing += CudaRuntimeDownloadForm_FormClosing;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
