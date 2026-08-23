@@ -66,6 +66,7 @@
             comboBoxEngine.FormattingEnabled = true;
             resources.ApplyResources(comboBoxEngine, "comboBoxEngine");
             comboBoxEngine.Name = "comboBoxEngine";
+            comboBoxEngine.SelectedIndexChanged += comboBoxEngine_SelectedIndexChanged;
             // 
             // labelEngine
             // 
@@ -85,12 +86,14 @@
             comboBoxLanguage.FormattingEnabled = true;
             resources.ApplyResources(comboBoxLanguage, "comboBoxLanguage");
             comboBoxLanguage.Name = "comboBoxLanguage";
+            comboBoxLanguage.SelectionChangeCommitted += comboBoxLanguage_SelectionChangeCommitted;
             // 
             // checkBoxStartInTray
             // 
             resources.ApplyResources(checkBoxStartInTray, "checkBoxStartInTray");
             checkBoxStartInTray.Name = "checkBoxStartInTray";
             checkBoxStartInTray.UseVisualStyleBackColor = true;
+            checkBoxStartInTray.CheckedChanged += checkBoxStartInTray_CheckedChanged;
             // 
             // labelHotkey
             // 
@@ -121,12 +124,15 @@
             comboBoxModel.FormattingEnabled = true;
             resources.ApplyResources(comboBoxModel, "comboBoxModel");
             comboBoxModel.Name = "comboBoxModel";
+            comboBoxModel.SelectionChangeCommitted += comboBoxModel_SelectionChangeCommitted;
             // 
             // textBoxRecordLimit
             // 
             resources.ApplyResources(textBoxRecordLimit, "textBoxRecordLimit");
             textBoxRecordLimit.Name = "textBoxRecordLimit";
+            textBoxRecordLimit.TextChanged += textBoxRecordLimit_TextChanged;
             textBoxRecordLimit.KeyDown += textBoxRecordingTime_KeyDown;
+            textBoxRecordLimit.Leave += textBoxRecordLimit_Leave;
             // 
             // labelRecordLimit
             // 
@@ -150,6 +156,7 @@
             resources.ApplyResources(checkBoxAutoStart, "checkBoxAutoStart");
             checkBoxAutoStart.Name = "checkBoxAutoStart";
             checkBoxAutoStart.UseVisualStyleBackColor = true;
+            checkBoxAutoStart.CheckedChanged += checkBoxAutoStart_CheckedChanged;
             // 
             // labelUiLanguage
             // 
@@ -161,6 +168,7 @@
             comboBoxUiLanguage.FormattingEnabled = true;
             resources.ApplyResources(comboBoxUiLanguage, "comboBoxUiLanguage");
             comboBoxUiLanguage.Name = "comboBoxUiLanguage";
+            comboBoxUiLanguage.SelectionChangeCommitted += comboBoxUiLanguage_SelectionChangeCommitted;
             // 
             // menuStrip
             // 
@@ -202,6 +210,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MainMenuStrip = menuStrip;
             Name = "SettingsForm";
+            Shown += SettingsForm_Shown;
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
             ResumeLayout(false);

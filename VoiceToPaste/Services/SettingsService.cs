@@ -8,9 +8,9 @@ using Serilog;
 namespace VoiceToPaste.Services
 {
     /// <summary>
-    /// Odczyt i zapis ustawień w pliku settings.yaml obok pliku wykonywalnego.
-    /// Brak pliku albo uszkodzona zawartość nigdy nie wywalają aplikacji — wracamy
-    /// do wartości domyślnych, naprawiamy plik, a szczegóły trafiają do LastLoadDiagnostic.
+    /// Reads and writes settings in the settings.yaml file next to the executable.
+    /// A missing or corrupted file never crashes the application — defaults are
+    /// restored, the file is repaired, and details are reported in LastLoadDiagnostic.
     /// </summary>
     public sealed class SettingsService
     {
@@ -23,7 +23,7 @@ namespace VoiceToPaste.Services
         {
         }
 
-        // Katalog podany jawnie — używany przez testy, żeby nie dotykać katalogu aplikacji.
+        // Directory provided explicitly — used by tests so the application directory is untouched.
         public SettingsService(string settingsDirectory)
         {
             SettingsPath = Path.Combine(settingsDirectory, SettingsFileName);
@@ -31,13 +31,13 @@ namespace VoiceToPaste.Services
 
         public string SettingsPath { get; }
 
-        /// <summary>Komunikat diagnostyczny z ostatniego odczytu; null, gdy odczyt był czysty.</summary>
+        /// <summary>Diagnostic message from the most recent load; null when the load was clean.</summary>
         public string? LastLoadDiagnostic { get; private set; }
 
         /// <summary>
-        /// Wspólne ustawienia całego procesu — jedna instancja mutowana na żywo przez
-        /// konsumentów i zrzucana na dysk bezparametrowym Save. Rzuca przed pierwszym
-        /// Load, bo ciche wartości domyślne byłyby gorsze niż jawny błąd.
+        /// The process-wide settings — a single instance mutated live by consumers and
+        /// flushed to disk by the parameterless Save. Throws before the first Load,
+        /// because silent defaults would be worse than an explicit error.
         /// </summary>
         public AppSettings Settings
         {
@@ -51,9 +51,9 @@ namespace VoiceToPaste.Services
         }
 
         /// <summary>
-        /// Odczytuje ustawienia z dysku dokładnie raz na proces. Drugie wywołanie rzuca
-        /// wyjątek, bo podmieniłoby instancję i osierociło referencje pobrane wcześniej
-        /// przez konsumentów.
+        /// Reads settings from disk exactly once per process. A second call throws,
+        /// because it would replace the instance and orphan references previously
+        /// captured by consumers.
         /// </summary>
         public AppSettings Load()
         {
@@ -74,19 +74,19 @@ namespace VoiceToPaste.Services
                 var yaml = File.ReadAllText(SettingsPath);
                 var settings = CreateDeserializer().Deserialize<AppSettings>(yaml);
 
-                // Pusty plik to poprawny YAML bez treści — traktujemy go jak brak ustawień.
+                // An empty file is valid YAML with no content — treat it as missing settings.
                 if (settings == null)
                 {
                     Logger.Warning("Settings file is empty. Default values will be restored.");
                     return RestoreDefaults("Plik settings.yaml był pusty — przywrócono ustawienia domyślne.");
                 }
 
-                // Instancja musi być dostępna przez Settings zanim ruszy ewentualny zapis naprawczy.
+                // The instance must be reachable through Settings before any repair save runs.
                 _settings = settings;
 
                 var repairs = new List<string>();
 
-                // Jawny wpis keyWords: null w pliku nie może wysypać edytora ani późniejszej podmiany.
+                // An explicit keyWords: null entry must not crash the editor or later replacement.
                 settings.KeyWords ??= [];
                 if (settings.WhisperModelId != null && WhisperModelCatalog.TryGetById(settings.WhisperModelId) == null)
                 {
@@ -149,8 +149,8 @@ namespace VoiceToPaste.Services
         }
 
         /// <summary>
-        /// Zapisuje bieżące Settings atomowo: najpierw plik tymczasowy obok, potem jego
-        /// podmiana za właściwy plik. Awaria w połowie zapisu nie zostawi więc uciętego
+        /// Atomically writes the current Settings: first a temp file next to it, then a
+        /// move over the real file. A failure mid-write therefore never leaves a truncated
         /// settings.yaml.
         /// </summary>
         public void Save()
@@ -162,8 +162,8 @@ namespace VoiceToPaste.Services
                 var yaml = CreateSerializer().Serialize(settings);
                 var tempPath = SettingsPath + ".tmp";
 
-                // Plik tymczasowy leży w tym samym katalogu, więc podmiana odbywa się
-                // w obrębie jednego wolumenu i jest atomowa.
+                // The temp file lives in the same directory, so the move stays within one
+                // volume and is atomic.
                 File.WriteAllText(tempPath, yaml);
                 File.Move(tempPath, SettingsPath, overwrite: true);
                 Logger.Information("Settings were saved.");
@@ -176,9 +176,9 @@ namespace VoiceToPaste.Services
         }
 
         /// <summary>
-        /// Zwraca ustawienia domyślne i próbuje naprawić plik na dysku, żeby użytkownik miał
-        /// poprawny punkt startu do ręcznej edycji. Błąd zapisu naprawczego jest tylko
-        /// dopisywany do diagnostyki — odczyt nie może się na nim wyłożyć.
+        /// Returns default settings and tries to repair the file on disk so the user has a
+        /// valid starting point for manual editing. A repair write error is only appended to
+        /// the diagnostics — the load must not fail on it.
         /// </summary>
         private AppSettings RestoreDefaults(string diagnostic)
         {
@@ -214,7 +214,7 @@ namespace VoiceToPaste.Services
             new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .WithEnumNamingConvention(CamelCaseNamingConvention.Instance)
-                // Nieznane klucze (np. z nowszej wersji aplikacji) nie mogą wysypać odczytu.
+                // Unknown keys (e.g. from a newer app version) must not break the load.
                 .IgnoreUnmatchedProperties()
                 .Build();
     }

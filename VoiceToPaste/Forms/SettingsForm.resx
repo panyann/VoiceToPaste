@@ -304,7 +304,7 @@
     <value>371, 279</value>
   </data>
   <data name="textBoxHotKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>411, 39</value>
+    <value>314, 39</value>
   </data>
   <data name="textBoxHotKey.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -451,7 +451,7 @@
     <value>True</value>
   </data>
   <data name="labelSeconds.Location" type="System.Drawing.Point, System.Drawing">
-    <value>691, 277</value>
+    <value>691, 282</value>
   </data>
   <data name="labelSeconds.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 32</value>
@@ -582,12 +582,6 @@
   <metadata name="menuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>268, 17</value>
   </metadata>
-  <data name="menuItemAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 38</value>
-  </data>
-  <data name="menuItemAbout.Text" xml:space="preserve">
-    <value>About...</value>
-  </data>
   <data name="menuStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -595,7 +589,7 @@
     <value>No</value>
   </data>
   <data name="menuStrip.Size" type="System.Drawing.Size, System.Drawing">
-    <value>794, 42</value>
+    <value>794, 40</value>
   </data>
   <data name="menuStrip.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -614,6 +608,12 @@
   </data>
   <data name="&gt;&gt;menuStrip.ZOrder" xml:space="preserve">
     <value>18</value>
+  </data>
+  <data name="menuItemAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 36</value>
+  </data>
+  <data name="menuItemAbout.Text" xml:space="preserve">
+    <value>About...</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

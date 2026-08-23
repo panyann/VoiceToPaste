@@ -5,9 +5,9 @@ using VoiceToPaste.Resources;
 namespace VoiceToPaste.Services
 {
     /// <summary>
-    /// Koordynuje pojedynczą sesję dyktowania: nagrywanie, limit czasu, transkrypcję i wynik.
-    /// Wszystkie żądania aktywacji są serializowane, więc timeout i skrót nie zatrzymają
-    /// tego samego nagrania równocześnie.
+    /// Coordinates a single dictation session: recording, timeout, transcription and output.
+    /// All activation requests are serialized, so the timeout and the hotkey never stop or
+    /// transcribe the same recording at the same time.
     /// </summary>
     internal sealed class DictationController : IDisposable
     {
@@ -41,8 +41,8 @@ namespace VoiceToPaste.Services
         public DictationState State => _stateMachine.State;
 
         /// <summary>
-        /// Ustawia limit dla kolejnych nagrań. Aktywne oczekiwanie timeoutu korzysta z kopii
-        /// utworzonej przy starcie nagrania, więc zmiana nie przerywa bieżącej sesji.
+        /// Sets the limit for the next recordings. The active timeout wait uses a copy created
+        /// at the start of recording, so a change does not interrupt the current session.
         /// </summary>
         public void SetRecordingLimit(int recordingLimitSeconds)
         {
@@ -54,7 +54,7 @@ namespace VoiceToPaste.Services
             Interlocked.Exchange(ref _recordingLimitTicks, TimeSpan.FromSeconds(recordingLimitSeconds).Ticks);
         }
 
-        /// <summary>Wstrzymuje aktywacje podczas używania testera z osobnym rejestratorem.</summary>
+        /// <summary>Suspends activations while the tester uses its own recorder.</summary>
         public void SetActivationsSuspended(bool suspended)
         {
             _activationSuspensionCount = Math.Max(0, _activationSuspensionCount + (suspended ? 1 : -1));
@@ -183,8 +183,8 @@ namespace VoiceToPaste.Services
         }
 
         /// <summary>
-        /// Stosuje aktualne reguły użytkownika do kompletnego tekstu transkrypcji.
-        /// To wspólny punkt dla przyszłego rozszerzania korekty rozpoznanego tekstu.
+        /// Applies the current user rules to the full transcription text.
+        /// This is the common point for future recognized-text correction.
         /// </summary>
         private string ApplyKeywordReplacements(string text) =>
             _keywordReplacementService.Replace(text, _settings.KeyWords).Text;
@@ -205,7 +205,7 @@ namespace VoiceToPaste.Services
             }
             catch (OperationCanceledException)
             {
-                // Ręczne zatrzymanie lub zamykanie aplikacji anuluje oczekiwanie timeoutu.
+                // Manual stop or application shutdown cancels the timeout wait.
             }
         }
 

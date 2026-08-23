@@ -40,46 +40,28 @@ namespace VoiceToPaste.Forms
             _settings = settingsService.Settings;
             _whisperEngineChangeWorkflow = new WhisperEngineChangeWorkflow(_settingsService);
             InitializeComponent();
+            ApplyVersionToTitle();
+            InitializeEngineCombo();
+            InitializeLanguageCombo();
+            InitializeUiLanguageCombo();
+            InitializeModelCombo();
+            ApplySettingsToControls();
+            InitializeRecordingLimitControls();
+            _hotkeyCapture = CreateHotkeyCapture();
+        }
+
+        // Numer wersji zawiera metadane commitu po '+'; w tytule pokazujemy sam numer wersji.
+        private void ApplyVersionToTitle()
+        {
             var productVersion = Application.ProductVersion;
             var metadataSeparatorIndex = productVersion.IndexOf('+');
             var displayedVersion = metadataSeparatorIndex >= 0
                 ? productVersion[..metadataSeparatorIndex]
                 : productVersion;
             Text = UiStrings.Format("SettingsWindowTitleWithVersion", Text, displayedVersion);
-            InitializeEngineCombo();
-            InitializeLanguageCombo();
-            InitializeUiLanguageCombo();
-            InitializeModelCombo();
-
-            SetSelectedBackend(_settings.TranscriptionEngine);
-            SetSelectedLanguage(_settings.TranscribeLanguage);
-            SetSelectedUiLanguage(_settings.UiLanguage);
-            SetSelectedModel(_settings.WhisperModelId);
-            checkBoxStartInTray.Checked = _settings.StartInTray;
-            checkBoxAutoStart.Checked = _settings.AutoStart;
-            toolTipAutoStart.SetToolTip(
-                checkBoxAutoStart,
-                UiStrings.Get("AutoStartDisableBeforeMovingApplicationTooltip"));
-            textBoxRecordLimit.Text = _settings.RecordingLimitSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            // Puste menu usuwa standardową opcję „Wklej”, aby pole przyjmowało tylko dane wpisane z klawiatury.
-            textBoxRecordLimit.ContextMenuStrip = _recordingLimitContextMenu;
-            _recordingLimitSaveTimer.Tick += recordingLimitSaveTimer_Tick;
-            _hotkeyCapture = new HotkeyCaptureController(textBoxHotKey);
-            _hotkeyCapture.SetHotkey(_settings.Hotkey);
-            _hotkeyCapture.GestureCaptured += HotkeyCapture_GestureCaptured;
-            _hotkeyCapture.CaptureStateChanged += HotkeyCapture_CaptureStateChanged;
-            comboBoxEngine.SelectedIndexChanged += comboBoxEngine_SelectedIndexChanged;
-            comboBoxLanguage.SelectionChangeCommitted += comboBoxLanguage_SelectionChangeCommitted;
-            comboBoxUiLanguage.SelectionChangeCommitted += comboBoxUiLanguage_SelectionChangeCommitted;
-            comboBoxModel.SelectionChangeCommitted += comboBoxModel_SelectionChangeCommitted;
-            checkBoxStartInTray.CheckedChanged += checkBoxStartInTray_CheckedChanged;
-            checkBoxAutoStart.CheckedChanged += checkBoxAutoStart_CheckedChanged;
-            textBoxRecordLimit.TextChanged += textBoxRecordLimit_TextChanged;
-            textBoxRecordLimit.Leave += textBoxRecordLimit_Leave;
-            Shown += SettingsForm_Shown;
         }
 
-        // Wypełniamy combo w kodzie zamiast w Designerze — łatwiej utrzymać mapowanie na enum.
+        // We fill the combos in code instead of the Designer — it is easier to keep the enum mapping.
         private void InitializeEngineCombo()
         {
             comboBoxEngine.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -108,6 +90,37 @@ namespace VoiceToPaste.Forms
         {
             comboBoxModel.DisplayMember = nameof(ModelSelectionOption.DisplayName);
             comboBoxModel.DataSource = _modelOptions;
+        }
+
+        private void ApplySettingsToControls()
+        {
+            SetSelectedBackend(_settings.TranscriptionEngine);
+            SetSelectedLanguage(_settings.TranscribeLanguage);
+            SetSelectedUiLanguage(_settings.UiLanguage);
+            SetSelectedModel(_settings.WhisperModelId);
+            checkBoxStartInTray.Checked = _settings.StartInTray;
+            checkBoxAutoStart.Checked = _settings.AutoStart;
+            toolTipAutoStart.SetToolTip(
+                checkBoxAutoStart,
+                UiStrings.Get("AutoStartDisableBeforeMovingApplicationTooltip"));
+            // The restore guard blocks TextChanged so startup does not arm the limit save timer.
+            RestoreRecordingLimit(_settings.RecordingLimitSeconds);
+        }
+
+        private void InitializeRecordingLimitControls()
+        {
+            // An empty menu removes the default "Paste" option so the field only accepts typed input.
+            textBoxRecordLimit.ContextMenuStrip = _recordingLimitContextMenu;
+            _recordingLimitSaveTimer.Tick += recordingLimitSaveTimer_Tick;
+        }
+
+        private HotkeyCaptureController CreateHotkeyCapture()
+        {
+            var capture = new HotkeyCaptureController(textBoxHotKey);
+            capture.SetHotkey(_settings.Hotkey);
+            capture.GestureCaptured += HotkeyCapture_GestureCaptured;
+            capture.CaptureStateChanged += HotkeyCapture_CaptureStateChanged;
+            return capture;
         }
 
         private TranscriptionBackend SelectedBackend => comboBoxEngine.SelectedIndex switch
@@ -162,8 +175,8 @@ namespace VoiceToPaste.Forms
         }
 
         /// <summary>
-        /// Zmiana modelu jest zatwierdzana dopiero po pobraniu jego pliku. Anulowanie dialogu
-        /// przywraca poprzednią wartość, dzięki czemu ustawienia nigdy nie wskazują braku modelu.
+        /// A model change is committed only after its file is downloaded. Cancelling the dialog
+        /// restores the previous value, so settings never point to a missing model.
         /// </summary>
         private async void comboBoxModel_SelectionChangeCommitted(object? sender, EventArgs e)
         {
@@ -300,7 +313,7 @@ namespace VoiceToPaste.Forms
             }
             catch (Exception ex)
             {
-                // Cofamy widok i model, aby UI nie sugerowało zapisu, który się nie udał.
+                // Revert the view and the model so the UI does not suggest a save that failed.
                 _settings.TranscribeLanguage = previousLanguage;
                 RestoreSelectedLanguage(previousLanguage);
                 Logger.Error(ex, "Failed to save the transcription language selection.");
@@ -314,8 +327,8 @@ namespace VoiceToPaste.Forms
         }
 
         /// <summary>
-        /// Zapisuje nowy język przed restartem. Nieudany zapis przywraca poprzednią wartość,
-        /// aby formularz i plik settings.yaml nie pokazywały rozbieżnego stanu.
+        /// Saves the new language before the restart. A failed save restores the previous value
+        /// so the form and settings.yaml do not show a divergent state.
         /// </summary>
         private void comboBoxUiLanguage_SelectionChangeCommitted(object? sender, EventArgs e)
         {
@@ -369,7 +382,7 @@ namespace VoiceToPaste.Forms
             }
             catch (Exception ex)
             {
-                // Cofamy model przed zmianą kontrolki, aby kolejne zdarzenie nie próbowało ponownie zapisywać ustawień.
+                // Revert the model before changing the control so the next event does not retry the save.
                 _settings.StartInTray = previousStartInTray;
                 checkBoxStartInTray.Checked = previousStartInTray;
                 Logger.Error(ex, "Failed to save the start-in-tray setting.");
@@ -383,8 +396,8 @@ namespace VoiceToPaste.Forms
         }
 
         /// <summary>
-        /// Aktualizuje najpierw zadanie systemowe, a następnie YAML. Gdy zapis YAML się nie uda,
-        /// przywraca również poprzednią konfigurację zadania, aby oba źródła pozostały zgodne.
+        /// Updates the scheduled task first, then the YAML. When the YAML save fails it also
+        /// restores the previous task configuration so both sources stay consistent.
         /// </summary>
         private void checkBoxAutoStart_CheckedChanged(object? sender, EventArgs e)
         {
@@ -411,7 +424,7 @@ namespace VoiceToPaste.Forms
                 if (taskUpdated)
                     RestoreAutoStartTask(previousAutoStart);
 
-                // Model jest już cofnięty, więc zdarzenie wywołane zmianą kontrolki zakończy się bez operacji.
+                // The model is already reverted, so the event fired by the control change ends without an action.
                 checkBoxAutoStart.Checked = previousAutoStart;
                 Logger.Error(ex, "Failed to change the autostart setting to {AutoStart}.", autoStart);
                 MessageBox.Show(
@@ -439,7 +452,7 @@ namespace VoiceToPaste.Forms
             }
             catch (Exception ex)
             {
-                // Pierwotny błąd nadal trafia do użytkownika, a ten wpis zachowuje szczegóły nieudanego rollbacku.
+                // The original error still reaches the user; this entry keeps the failed rollback details.
                 Logger.Error(ex, "Failed to restore the previous autostart task configuration.");
             }
         }
@@ -447,8 +460,8 @@ namespace VoiceToPaste.Forms
         private void SettingsForm_Shown(object? sender, EventArgs e)
         {
             Logger.Information("The settings window was opened.");
-            // Ustawienie mogło zostać zapisane przed aktualizacją aplikacji. Wtedy preload
-            // bezpiecznie używa CPU, a użytkownik nadal może świadomie pobrać runtime CUDA.
+            // The setting may have been saved before the application update. Then preloading
+            // safely uses the CPU while the user can still deliberately download the CUDA runtime.
             if (_settings.TranscriptionEngine != TranscriptionBackend.Gpu)
                 return;
 
@@ -525,7 +538,7 @@ namespace VoiceToPaste.Forms
 
         private void btnTester_Click(object sender, EventArgs e)
         {
-            // ShowDialog nie zwalnia formularza automatycznie, więc using gwarantuje zwolnienie rejestratora.
+            // ShowDialog does not dispose the form automatically, so using guarantees the recorder is released.
             Logger.Information("Opening the transcription tester.");
             using var testerForm = new TesterForm(_settings);
             TesterVisibilityChanged?.Invoke(true);
@@ -568,7 +581,7 @@ namespace VoiceToPaste.Forms
             HotkeyCaptureVisibilityChanged?.Invoke(isCapturing);
         }
 
-        /// <summary>Pozycja listy modeli; brak modelu jest prawidłowym stanem konfiguracji.</summary>
+        /// <summary>Position in the model list; a missing model is a valid configuration state.</summary>
         private sealed class ModelSelectionOption
         {
             public ModelSelectionOption(WhisperModel? model)
@@ -649,8 +662,8 @@ namespace VoiceToPaste.Forms
         }
 
         /// <summary>
-        /// Zapisuje limit dopiero po sprawdzeniu całej zawartości pola, ponieważ użytkownik
-        /// może wkleić tekst z pominięciem ograniczenia klawiszy.
+        /// Saves the limit only after checking the whole field content, because the user
+        /// can paste text bypassing the key restriction.
         /// </summary>
         private void SaveRecordingLimit(bool showValidationError, bool restoreInvalidValue)
         {

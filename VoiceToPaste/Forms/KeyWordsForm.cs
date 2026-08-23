@@ -14,8 +14,8 @@ using VoiceToPaste.Services;
 namespace VoiceToPaste.Forms
 {
     /// <summary>
-    /// Edytor reguł podmiany fraz w transkrypcji. Pracuje na kopii listy z AppSettings,
-    /// więc niezapisane zmiany nigdy nie trafiają do wspólnego modelu.
+    /// Editor for phrase replacement rules in transcription. It works on a copy of the list
+    /// from AppSettings, so unsaved changes never reach the shared model.
     /// </summary>
     public partial class KeyWordsForm : Form
     {
@@ -34,7 +34,7 @@ namespace VoiceToPaste.Forms
             _settings = settingsService.Settings;
             InitializeComponent();
 
-            // Kopia elementów, aby edycja w siatce nie modyfikowała wspólnych ustawień przed zapisem.
+            // A copy of the items so editing the grid does not mutate the shared settings before saving.
             _keywords = new BindingList<DGV_KeyWords>(
                 _settings.KeyWords.Select(k => new DGV_KeyWords { Key = k.Key, Word = k.Word }).ToList())
             {
@@ -45,7 +45,7 @@ namespace VoiceToPaste.Forms
             bindingSource.DataSource = _keywords;
             _loading = false;
 
-            // Zmiany komórek i wierszy oznaczają brudny stan i kasują komunikat o ostatnim zapisie.
+            // Cell and row changes mark the dirty state and clear the last-save message.
             dataGridView.CellValueChanged += DataGridView_CellValueChanged;
             dataGridView.UserDeletedRow += DataGridView_UserDeletedRow;
             bindingSource.ListChanged += BindingSource_ListChanged;
@@ -87,8 +87,8 @@ namespace VoiceToPaste.Forms
         }
 
         /// <summary>
-        /// Zapisuje reguły: kończy edycję komórki, normalizuje wpisy, waliduje kompletność
-        /// i duplikaty, a po błędzie zapisu przywraca poprzednią listę we wspólnych ustawieniach.
+        /// Saves the rules: ends cell editing, normalizes entries, validates completeness and
+        /// duplicates, and restores the previous list in the shared settings after a save error.
         /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -121,7 +121,7 @@ namespace VoiceToPaste.Forms
             }
             catch (Exception ex)
             {
-                // Rollback wspólnego modelu, aby nieudany zapis nie zmienił zachowania aplikacji.
+                // Rollback the shared model so a failed save does not change application behavior.
                 _settings.KeyWords = previous;
                 Logger.Error(ex, "Failed to save keywords.");
                 MessageBox.Show(this, UiStrings.Format("SettingsSaveFailed", LocalizedExceptionFactory.GetUserMessage(ex)),
@@ -136,8 +136,8 @@ namespace VoiceToPaste.Forms
         }
 
         /// <summary>
-        /// Buduje zapisywalną listę: przycina brzegowe spacje, pomija puste wiersze,
-        /// a wiersze niepełne i zduplikowane frazy odrzuca z czytelnym komunikatem.
+        /// Builds the saveable list: trims surrounding spaces, skips empty rows, and rejects
+        /// incomplete rows and duplicated phrases with a readable message.
         /// </summary>
         private List<DGV_KeyWords> BuildNormalizedKeywords()
         {

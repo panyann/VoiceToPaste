@@ -8,7 +8,7 @@ using VoiceToPaste.Services;
 namespace VoiceToPaste
 {
     /// <summary>
-    /// Zarządza czasem życia aplikacji działającej w zasobniku systemowym.
+    /// Manages the application lifetime while it runs in the system tray.
     /// </summary>
     internal sealed class TrayApplicationContext : ApplicationContext
     {
@@ -72,8 +72,8 @@ namespace VoiceToPaste
             _hotkeyService.Activated += HotkeyService_Activated;
             RegisterConfiguredHotkey(_settings.Hotkey);
 
-            // MainForm zostałby automatycznie pokazany przez WinForms na początku pętli,
-            // dlatego sami kontrolujemy pierwsze wyświetlenie formularza.
+            // WinForms would show the MainForm automatically at the start of the loop,
+            // so we control the first display of the form ourselves.
             if (showSettingsAtStartup || !_settings.StartInTray)
                 ShowSettingsForm();
 
@@ -83,8 +83,8 @@ namespace VoiceToPaste
         public bool ShouldRestart { get; private set; }
 
         /// <summary>
-        /// Sprawdza zadanie tylko wtedy, gdy użytkownik wcześniej włączył autostart.
-        /// Odmowa naprawy nie zmienia zapisanej intencji i nie blokuje działania aplikacji.
+        /// Checks the task only when the user previously enabled autostart.
+        /// Declining the repair does not change the stored intent and does not block the app.
         /// </summary>
         private void CheckAutoStartConfiguration()
         {
@@ -169,8 +169,8 @@ namespace VoiceToPaste
         }
 
         /// <summary>
-        /// Ładuje ikonę wdrożoną obok aplikacji, aby tray korzystał z tych samych plików ICO
-        /// co konfiguracja projektu i publikacja.
+        /// Loads the icon deployed next to the application so the tray uses the same ICO
+        /// files as the project configuration and publication.
         /// </summary>
         private static Icon LoadIcon(string fileName)
         {
@@ -285,8 +285,8 @@ namespace VoiceToPaste
         }
 
         /// <summary>
-        /// Zwalnia zasoby zasobnika przed opuszczeniem pętli komunikatów, aby Windows nie
-        /// pozostawił widocznej ikony po zakończeniu procesu.
+        /// Releases tray resources before leaving the message loop so Windows does not
+        /// leave a visible icon after the process exits.
         /// </summary>
         protected override void ExitThreadCore()
         {

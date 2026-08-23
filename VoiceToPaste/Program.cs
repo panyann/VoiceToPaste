@@ -27,8 +27,8 @@ namespace VoiceToPaste
                 var settingsService = new SettingsService();
                 var settings = settingsService.Load();
 
-                // Kulturę ustawiamy przed inicjalizacją WinForms, aby zasoby formularzy,
-                // komunikaty oraz zadania tworzone później używały tego samego języka.
+                // We set the culture before WinForms initialization so form resources,
+                // messages and tasks created later use the same language.
                 UiLanguages.ApplyCulture(settings.UiLanguage);
 
                 using var singleInstanceMutex = new Mutex(
@@ -46,8 +46,8 @@ namespace VoiceToPaste
                     return;
                 }
 
-                // Uchwyt muteksa pozostaje otwarty do końca procesu, aby druga instancja nie
-                // rozpoczęła inicjalizacji usług ani nie utworzyła własnej ikony tray.
+                // The mutex handle stays open until the process ends so a second instance
+                // cannot start service initialization or create its own tray icon.
                 Log.Information("=== Starting VoiceToPaste, version {ApplicationVersion}. ===",
                     GetApplicationVersion());
                 ApplicationConfiguration.Initialize();
@@ -63,8 +63,8 @@ namespace VoiceToPaste
                 var preloadBackend = settings.TranscriptionEngine;
                 if (preloadBackend == TranscriptionBackend.Gpu && !cudaRuntimeService.IsRuntimeInstalled())
                 {
-                    // Nie próbujemy wymuszać CUDA bez wymaganych bibliotek. Użytkownik może je
-                    // pobrać z ustawień, a po restarcie model zostanie załadowany już na GPU.
+                    // We do not force CUDA without the required libraries. The user can download
+                    // them from Settings, and after a restart the model is loaded on the GPU.
                     Log.Warning("GPU was selected, but CUDA libraries are missing. Preloading will use the CPU.");
                     preloadBackend = TranscriptionBackend.Cpu;
                 }
@@ -75,8 +75,8 @@ namespace VoiceToPaste
                 {
                     var preloadTask = transcriptionService.StartInitializationAsync(preloadBackend, selectedModel);
 
-                    // Nie blokujemy utworzenia formularza. Obserwujemy wyjątek zadania, a diagnostyka
-                    // pozostaje dostępna w singletonie przez State oraz InitializationError.
+                    // We do not block creating the form. We observe the task exception and the
+                    // diagnostics remain available in the singleton through State and InitializationError.
                     _ = ObservePreloadFailureAsync(preloadTask);
                 }
                 else
@@ -143,8 +143,8 @@ namespace VoiceToPaste
         }
 
         /// <summary>
-        /// Uruchamia następną instancję dopiero po zamknięciu pętli WinForms, zwolnieniu
-        /// zasobów i mutexa. Zapobiega to odrzuceniu restartu jako drugiej instancji.
+        /// Starts the next instance only after the WinForms loop, resources and the mutex are
+        /// released. This prevents the restart from being rejected as a second instance.
         /// </summary>
         private static void StartNewInstance()
         {
@@ -173,8 +173,8 @@ namespace VoiceToPaste
         }
 
         /// <summary>
-        /// Obserwuje zadanie preloadu, aby błąd modelu nie został nieobsłużonym wyjątkiem w tle.
-        /// Stan Failed i szczegóły błędu ustawia już TranscriptionService.
+        /// Observes the preload task so a model failure is not an unhandled background exception.
+        /// The Failed state and error details are already set by TranscriptionService.
         /// </summary>
         private static async Task ObservePreloadFailureAsync(Task preloadTask)
         {
@@ -184,8 +184,8 @@ namespace VoiceToPaste
             }
             catch (Exception ex)
             {
-                // Błąd stanu został zapisany w TranscriptionService; tutaj zapisujemy obserwację
-                // zadania, aby wyjątek tła nie zniknął bez śladu.
+                // The state error was stored in TranscriptionService; here we only observe the
+                // task so the background exception does not disappear without a trace.
                 Log.Debug(ex, "The preload task failed.");
             }
         }
@@ -209,7 +209,7 @@ namespace VoiceToPaste
             }
             catch (Exception ex)
             {
-                // Brak prawa zapisu obok EXE nie może uniemożliwić uruchomienia aplikacji.
+                // No write permission next to the EXE must not prevent the application from running.
                 Log.Logger = new LoggerConfiguration().MinimumLevel.Information().CreateLogger();
                 Log.Error(ex, "Failed to configure logging in the application directory.");
             }
