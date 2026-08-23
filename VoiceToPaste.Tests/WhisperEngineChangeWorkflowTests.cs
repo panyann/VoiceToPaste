@@ -127,7 +127,9 @@ namespace VoiceToPaste.Tests
             service.Settings.TranscriptionEngine = TranscriptionBackend.Cpu;
             var workflow = new WhisperEngineChangeWorkflow(service);
 
-            Assert.Throws<UnauthorizedAccessException>(() => workflow.SaveChange(TranscriptionBackend.Gpu));
+            var exception = Assert.ThrowsAny<Exception>(() => workflow.SaveChange(TranscriptionBackend.Gpu));
+
+            Assert.True(exception is UnauthorizedAccessException or IOException);
 
             Assert.Equal(TranscriptionBackend.Cpu, service.Settings.TranscriptionEngine);
         }

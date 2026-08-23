@@ -121,6 +121,7 @@
   <data name="TranscriptionEngineAuto" xml:space="preserve"><value>Auto</value></data>
   <data name="TranscriptionEngineCpu" xml:space="preserve"><value>CPU</value></data>
   <data name="TranscriptionEngineGpu" xml:space="preserve"><value>GPU (NVIDIA CUDA)</value></data>
+  <data name="WhisperEngineRestartInfo" xml:space="preserve"><value>The transcription engine will take effect after a restart. The application will now restart.</value></data>
   <data name="TranscriptionError" xml:space="preserve"><value>Transcription error: {0}</value></data>
   <data name="TranscriptionInitializationRequired" xml:space="preserve"><value>Transcription requires StartInitializationAsync to be called first.</value></data>
   <data name="TranscriptionLanguageAutoDetect" xml:space="preserve"><value>Automatically detect from speech</value></data>

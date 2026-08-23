@@ -66,7 +66,7 @@
             comboBoxEngine.FormattingEnabled = true;
             resources.ApplyResources(comboBoxEngine, "comboBoxEngine");
             comboBoxEngine.Name = "comboBoxEngine";
-            comboBoxEngine.SelectedIndexChanged += comboBoxEngine_SelectedIndexChanged;
+            comboBoxEngine.SelectionChangeCommitted += comboBoxEngine_SelectionChangeCommitted;
             // 
             // labelEngine
             // 

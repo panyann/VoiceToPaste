@@ -19,10 +19,6 @@ namespace VoiceToPaste.Forms
         private readonly System.Windows.Forms.Timer _recordingLimitSaveTimer = new() { Interval = 1000 };
         private readonly List<ModelSelectionOption> _modelOptions =
             [new(null), .. WhisperModelCatalog.GetAll().Select(model => new ModelSelectionOption(model))];
-        private bool _changingEngineSelection;
-        private bool _changingLanguageSelection;
-        private bool _changingUiLanguageSelection;
-        private bool _changingModelSelection;
         private bool _restoringRecordingLimit;
 
         public event Action<bool>? TesterVisibilityChanged;
@@ -180,9 +176,6 @@ namespace VoiceToPaste.Forms
         /// </summary>
         private async void comboBoxModel_SelectionChangeCommitted(object? sender, EventArgs e)
         {
-            if (_changingModelSelection)
-                return;
-
             var selectedModel = SelectedModel;
             if (string.Equals(_settings.WhisperModelId, selectedModel?.Id, StringComparison.Ordinal))
                 return;
@@ -202,7 +195,7 @@ namespace VoiceToPaste.Forms
             if (DownloadSelectedModel(selectedModel))
                 return;
 
-            RestoreSelectedModel(_settings.WhisperModelId);
+            SetSelectedModel(_settings.WhisperModelId);
         }
 
         private bool DownloadSelectedModel(WhisperModel selectedModel)
@@ -228,7 +221,7 @@ namespace VoiceToPaste.Forms
             catch (Exception ex)
             {
                 _settings.WhisperModelId = previousModelId;
-                RestoreSelectedModel(previousModelId);
+                SetSelectedModel(previousModelId);
                 Logger.Error(ex, "Failed to save the Whisper model selection.");
                 MessageBox.Show(
                     this,
@@ -239,11 +232,8 @@ namespace VoiceToPaste.Forms
             }
         }
 
-        private void comboBoxEngine_SelectedIndexChanged(object? sender, EventArgs e)
+        private void comboBoxEngine_SelectionChangeCommitted(object? sender, EventArgs e)
         {
-            if (_changingEngineSelection)
-                return;
-
             var selectedEngine = SelectedBackend;
             var previousEngine = _settings.TranscriptionEngine;
             var step = _whisperEngineChangeWorkflow.EvaluateChange(selectedEngine, _cudaRuntimeService.IsRuntimeInstalled());
@@ -252,34 +242,32 @@ namespace VoiceToPaste.Forms
 
             Logger.Information("The user is changing the Whisper engine from {PreviousEngine} to {SelectedEngine}.", previousEngine, selectedEngine);
 
-            // ReadyToSave means CUDA is already available, so the engine can be persisted directly.
-            var saveAllowed = step == WhisperEngineChangeStep.ReadyToSave;
             if (step == WhisperEngineChangeStep.RequiresCudaInstall)
             {
                 var cudaInstalled = InstallCudaRuntime();
                 if (!cudaInstalled)
                 {
                     Logger.Information("The Whisper engine change was reverted because CUDA installation was not completed.");
-                    RestoreSelectedBackend(previousEngine);
+                    SetSelectedBackend(previousEngine);
                     return;
                 }
-
-                saveAllowed = true;
             }
-
-            if (!saveAllowed)
+            else if (step != WhisperEngineChangeStep.ReadyToSave)
+            {
                 return;
+            }
 
             try
             {
                 _whisperEngineChangeWorkflow.SaveChange(selectedEngine);
                 Logger.Information("Restarting the application.");
+                ShowWhisperEngineRestartInfo();
                 RestartRequested?.Invoke();
             }
             catch (Exception ex)
             {
                 // The workflow has already restored the in-memory engine; restore the view as well.
-                RestoreSelectedBackend(previousEngine);
+                SetSelectedBackend(previousEngine);
                 Logger.Error(ex, "Failed to save the Whisper engine selection.");
                 MessageBox.Show(
                     this,
@@ -292,9 +280,6 @@ namespace VoiceToPaste.Forms
 
         private void comboBoxLanguage_SelectionChangeCommitted(object? sender, EventArgs e)
         {
-            if (_changingLanguageSelection)
-                return;
-
             var selectedLanguage = SelectedLanguage;
             if (_settings.TranscribeLanguage == selectedLanguage)
                 return;
@@ -315,7 +300,7 @@ namespace VoiceToPaste.Forms
             {
                 // Revert the view and the model so the UI does not suggest a save that failed.
                 _settings.TranscribeLanguage = previousLanguage;
-                RestoreSelectedLanguage(previousLanguage);
+                SetSelectedLanguage(previousLanguage);
                 Logger.Error(ex, "Failed to save the transcription language selection.");
                 MessageBox.Show(
                     this,
@@ -332,11 +317,6 @@ namespace VoiceToPaste.Forms
         /// </summary>
         private void comboBoxUiLanguage_SelectionChangeCommitted(object? sender, EventArgs e)
         {
-            if (_changingUiLanguageSelection)
-            {
-                return;
-            }
-
             var selectedLanguage = GetSelectedUiLanguage();
             if (string.Equals(_settings.UiLanguage, selectedLanguage, StringComparison.Ordinal))
             {
@@ -355,7 +335,7 @@ namespace VoiceToPaste.Forms
             catch (Exception ex)
             {
                 _settings.UiLanguage = previousLanguage;
-                RestoreSelectedUiLanguage(previousLanguage);
+                SetSelectedUiLanguage(previousLanguage);
                 Logger.Error(ex, "Failed to save the interface language.");
                 MessageBox.Show(
                     this,
@@ -472,7 +452,18 @@ namespace VoiceToPaste.Forms
                 return;
 
             Logger.Information("CUDA was installed for the existing GPU setting. Restarting the application.");
+            ShowWhisperEngineRestartInfo();
             RestartRequested?.Invoke();
+        }
+
+        private void ShowWhisperEngineRestartInfo()
+        {
+            MessageBox.Show(
+                this,
+                UiStrings.Get("WhisperEngineRestartInfo"),
+                UiStrings.Get("ApplicationTitle"),
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private bool InstallCudaRuntime()
@@ -482,58 +473,6 @@ namespace VoiceToPaste.Forms
             var installed = downloadForm.ShowDialog(this) == DialogResult.OK;
             Logger.Information("The CUDA installation window was closed. Success: {Installed}.", installed);
             return installed;
-        }
-
-        private void RestoreSelectedBackend(TranscriptionBackend backend)
-        {
-            _changingEngineSelection = true;
-            try
-            {
-                SetSelectedBackend(backend);
-            }
-            finally
-            {
-                _changingEngineSelection = false;
-            }
-        }
-
-        private void RestoreSelectedLanguage(string language)
-        {
-            _changingLanguageSelection = true;
-            try
-            {
-                SetSelectedLanguage(language);
-            }
-            finally
-            {
-                _changingLanguageSelection = false;
-            }
-        }
-
-        private void RestoreSelectedUiLanguage(string language)
-        {
-            _changingUiLanguageSelection = true;
-            try
-            {
-                SetSelectedUiLanguage(language);
-            }
-            finally
-            {
-                _changingUiLanguageSelection = false;
-            }
-        }
-
-        private void RestoreSelectedModel(string? modelId)
-        {
-            _changingModelSelection = true;
-            try
-            {
-                SetSelectedModel(modelId);
-            }
-            finally
-            {
-                _changingModelSelection = false;
-            }
         }
 
         private void btnTester_Click(object sender, EventArgs e)

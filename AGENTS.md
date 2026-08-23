@@ -212,6 +212,10 @@ Idle → Recording → Transcribing → Idle
   the existing icon, tooltip, or show a short message instead.
 - Configure controls through WinForms Designer whenever possible. Do not manually edit
   generated `*.Designer.cs` files.
+- For controls that are also set programmatically, prefer events raised only by user
+  actions, such as `SelectionChangeCommitted` instead of `SelectedIndexChanged`.
+  Event-handler suppression flags couple separate code paths and are a last resort;
+  when unavoidable, document the dependency at both the flag and the handler.
 - Set form and control geometry only in the base `Language = (Default)` variant through
   WinForms Designer.
 - Prefer standard WinForms controls and layout containers for new layouts rather than

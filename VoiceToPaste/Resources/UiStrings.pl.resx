@@ -121,6 +121,7 @@
   <data name="TranscriptionEngineAuto" xml:space="preserve"><value>Automatycznie</value></data>
   <data name="TranscriptionEngineCpu" xml:space="preserve"><value>CPU</value></data>
   <data name="TranscriptionEngineGpu" xml:space="preserve"><value>GPU (NVIDIA CUDA)</value></data>
+  <data name="WhisperEngineRestartInfo" xml:space="preserve"><value>Silnik transkrypcji zacznie działać po restarcie. Aplikacja zostanie teraz uruchomiona ponownie.</value></data>
   <data name="TranscriptionError" xml:space="preserve"><value>Błąd transkrypcji: {0}</value></data>
   <data name="TranscriptionInitializationRequired" xml:space="preserve"><value>Transkrypcja wymaga wcześniejszego wywołania StartInitializationAsync.</value></data>
   <data name="TranscriptionLanguageAutoDetect" xml:space="preserve"><value>Automatycznie z mowy</value></data>
