@@ -37,6 +37,12 @@ namespace VoiceToPaste.Forms
                 FormatMegabytes(missingDownloadSize),
                 519);
             toolStripStatusLabel.Text = UiStrings.Get("DownloadWaitingToStart");
+
+            dm = new DarkModeCS(this)
+            {
+                //[Optional] Choose your preferred color mode here:
+                ColorMode = DarkModeCS.DisplayMode.SystemDefault
+            };
         }
 
         /// <summary>Pobiera CUDA wyłącznie po świadomym kliknięciu użytkownika.</summary>
