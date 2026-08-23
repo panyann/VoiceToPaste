@@ -9,7 +9,9 @@
     <ApplicationIcon>Assets\Icons\micro-green.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
+    <!-- Third-party controls are not edited through the WinForms Designer. -->
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
