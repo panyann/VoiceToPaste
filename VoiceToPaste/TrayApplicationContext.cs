@@ -136,14 +136,53 @@ namespace VoiceToPaste
             if (_settingsForm.WindowState != FormWindowState.Minimized)
                 return;
 
-            _settingsForm.ShowInTaskbar = false;
+            // Let Windows finish minimizing before hiding the form to avoid changing its native state during WM_SIZE.
+            _settingsForm.BeginInvoke(HideMinimizedSettingsForm);
+        }
+
+        /// <summary>
+        /// Hides the settings form only when it remains minimized after the current window message completes.
+        /// </summary>
+        private void HideMinimizedSettingsForm()
+        {
+            if (_settingsForm.IsDisposed || _settingsForm.WindowState != FormWindowState.Minimized)
+                return;
+
             _settingsForm.Hide();
         }
 
         private void NotifyIcon_MouseClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                ShowSettingsForm();
+                ToggleSettingsForm();
+        }
+
+        /// <summary>
+        /// Toggles the settings form unless one of its modal dialogs is open.
+        /// </summary>
+        private void ToggleSettingsForm()
+        {
+            if (_settingsForm.IsDisposed || HasOpenModalDialog())
+                return;
+
+            if (_settingsForm.Visible)
+            {
+                _settingsForm.Hide();
+                return;
+            }
+
+            ShowSettingsForm();
+        }
+
+        private bool HasOpenModalDialog()
+        {
+            foreach (Form ownedForm in _settingsForm.OwnedForms)
+            {
+                if (!ownedForm.IsDisposed && ownedForm.Visible && ownedForm.Modal)
+                    return true;
+            }
+
+            return false;
         }
 
         private async void HotkeyService_Activated(object? sender, EventArgs e)
@@ -267,9 +306,8 @@ namespace VoiceToPaste
             if (_settingsForm.IsDisposed)
                 return;
 
-            _settingsForm.WindowState = FormWindowState.Normal;
-            _settingsForm.ShowInTaskbar = true;
             _settingsForm.Show();
+            _settingsForm.WindowState = FormWindowState.Normal;
             _settingsForm.Activate();
         }
 
