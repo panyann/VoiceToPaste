@@ -51,6 +51,7 @@
             comboBoxUiLanguage = new ComboBox();
             menuStrip = new MenuStrip();
             menuItemAbout = new ToolStripMenuItem();
+            menuItemThemeToggle = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             SuspendLayout();
             // 
@@ -173,7 +174,7 @@
             // menuStrip
             // 
             menuStrip.ImageScalingSize = new Size(32, 32);
-            menuStrip.Items.AddRange(new ToolStripItem[] { menuItemAbout });
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuItemAbout, menuItemThemeToggle });
             resources.ApplyResources(menuStrip, "menuStrip");
             menuStrip.Name = "menuStrip";
             // 
@@ -183,6 +184,12 @@
             menuItemAbout.Name = "menuItemAbout";
             resources.ApplyResources(menuItemAbout, "menuItemAbout");
             menuItemAbout.Click += menuItemAbout_Click;
+            // 
+            // menuItemThemeToggle
+            // 
+            resources.ApplyResources(menuItemThemeToggle, "menuItemThemeToggle");
+            menuItemThemeToggle.Name = "menuItemThemeToggle";
+            menuItemThemeToggle.Click += menuItemThemeToggle_Click;
             // 
             // SettingsForm
             // 
@@ -240,5 +247,6 @@
         private ComboBox comboBoxUiLanguage;
         private MenuStrip menuStrip;
         private ToolStripMenuItem menuItemAbout;
+        private ToolStripMenuItem menuItemThemeToggle;
     }
 }

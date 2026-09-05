@@ -116,6 +116,18 @@ namespace VoiceToPaste.Services
                     repairs.Add("Nieprawidłowy język interfejsu — przywrócono bezpieczną wartość domyślną.");
                 }
 
+                // The theme is a plain string, so an unknown value repairs only this field
+                // instead of resetting the whole file like a broken enum would.
+                var normalizedTheme = AppThemes.Normalize(settings.SelectedTheme);
+                if (!string.Equals(settings.SelectedTheme, normalizedTheme, StringComparison.Ordinal))
+                {
+                    Logger.Warning("Invalid selected theme {SelectedTheme}. {NormalizedTheme} will be used.",
+                        settings.SelectedTheme,
+                        normalizedTheme);
+                    settings.SelectedTheme = normalizedTheme;
+                    repairs.Add("Nieprawidłowy motyw interfejsu — przywrócono bezpieczną wartość.");
+                }
+
                 if (settings.Hotkey != null && !settings.Hotkey.IsValid(out _))
                 {
                     Logger.Warning("Invalid global hotkey. The default hotkey will be restored.");

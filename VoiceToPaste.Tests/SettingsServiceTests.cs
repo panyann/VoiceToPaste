@@ -35,6 +35,7 @@ namespace VoiceToPaste.Tests
             Assert.Null(settings.WhisperModelId);
             Assert.Equal(TranscriptionLanguages.GetSystemDefaultCode(), settings.TranscribeLanguage);
             Assert.Equal(UiLanguages.GetSystemDefaultCode(), settings.UiLanguage);
+            Assert.Equal(AppThemes.Dark, settings.SelectedTheme);
             Assert.False(settings.StartInTray);
             Assert.False(settings.AutoStart);
             Assert.Equal(AppSettings.DefaultRecordingLimitSeconds, settings.RecordingLimitSeconds);
@@ -44,6 +45,7 @@ namespace VoiceToPaste.Tests
             Assert.Contains("autoStart: false", File.ReadAllText(service.SettingsPath));
             Assert.Contains("recordingLimitSeconds: 60", File.ReadAllText(service.SettingsPath));
             Assert.Contains($"uiLanguage: {settings.UiLanguage}", File.ReadAllText(service.SettingsPath));
+            Assert.Contains("selectedTheme: dark", File.ReadAllText(service.SettingsPath));
             Assert.NotNull(service.LastLoadDiagnostic);
         }
 
@@ -142,6 +144,65 @@ namespace VoiceToPaste.Tests
 
             Assert.Equal("en", settings.UiLanguage);
             Assert.Equal("pl", settings.TranscribeLanguage);
+        }
+
+        [Fact]
+        public void Load_MissingSelectedTheme_ReturnsDarkTheme()
+        {
+            var service = CreateService();
+            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\n");
+
+            var settings = service.Load();
+
+            Assert.Equal(AppThemes.Dark, settings.SelectedTheme);
+            Assert.Null(service.LastLoadDiagnostic);
+        }
+
+        [Theory]
+        [InlineData("dark")]
+        [InlineData("light")]
+        public void Load_ValidSelectedThemeValues_AreReadCorrectly(string selectedTheme)
+        {
+            var service = CreateService();
+            File.WriteAllText(service.SettingsPath, $"selectedTheme: {selectedTheme}\n");
+
+            var settings = service.Load();
+
+            Assert.Equal(selectedTheme, settings.SelectedTheme);
+            Assert.Null(service.LastLoadDiagnostic);
+        }
+
+        [Theory]
+        [InlineData("blue", "dark")]
+        [InlineData("DARK", "dark")]
+        [InlineData("Light", "light")]
+        public void Load_NonCanonicalSelectedTheme_IsNormalizedAndRepairsFile(string selectedTheme, string expected)
+        {
+            var service = CreateService();
+            File.WriteAllText(
+                service.SettingsPath,
+                $"transcriptionEngine: cpu\nselectedTheme: {selectedTheme}\n");
+
+            var settings = service.Load();
+
+            // Naprawa dotyczy wyłącznie motywu — pozostałe ustawienia pozostają bez zmian.
+            Assert.Equal(TranscriptionBackend.Cpu, settings.TranscriptionEngine);
+            Assert.Equal(expected, settings.SelectedTheme);
+            Assert.NotNull(service.LastLoadDiagnostic);
+            Assert.Contains($"selectedTheme: {expected}", File.ReadAllText(service.SettingsPath));
+        }
+
+        [Fact]
+        public void Load_SelectedThemeSetToNull_RestoresDarkAndRepairsFile()
+        {
+            var service = CreateService();
+            File.WriteAllText(service.SettingsPath, "selectedTheme: null\n");
+
+            var settings = service.Load();
+
+            Assert.Equal(AppThemes.Dark, settings.SelectedTheme);
+            Assert.NotNull(service.LastLoadDiagnostic);
+            Assert.Contains("selectedTheme: dark", File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
@@ -302,6 +363,7 @@ namespace VoiceToPaste.Tests
             settings.WhisperModelId = "medium";
             settings.TranscribeLanguage = "en";
             settings.UiLanguage = "pl";
+            settings.SelectedTheme = AppThemes.Light;
             settings.StartInTray = true;
             settings.AutoStart = true;
             settings.RecordingLimitSeconds = 120;
@@ -319,6 +381,7 @@ namespace VoiceToPaste.Tests
             Assert.Equal("medium", reloaded.WhisperModelId);
             Assert.Equal("en", reloaded.TranscribeLanguage);
             Assert.Equal("pl", reloaded.UiLanguage);
+            Assert.Equal(AppThemes.Light, reloaded.SelectedTheme);
             Assert.True(reloaded.StartInTray);
             Assert.True(reloaded.AutoStart);
             Assert.Equal(120, reloaded.RecordingLimitSeconds);
@@ -327,6 +390,7 @@ namespace VoiceToPaste.Tests
             Assert.Contains("whisperModelId: medium", File.ReadAllText(service.SettingsPath));
             Assert.Contains("transcribeLanguage: en", File.ReadAllText(service.SettingsPath));
             Assert.Contains("uiLanguage: pl", File.ReadAllText(service.SettingsPath));
+            Assert.Contains("selectedTheme: light", File.ReadAllText(service.SettingsPath));
             Assert.Contains("startInTray: true", File.ReadAllText(service.SettingsPath));
             Assert.Contains("autoStart: true", File.ReadAllText(service.SettingsPath));
             Assert.Contains("recordingLimitSeconds: 120", File.ReadAllText(service.SettingsPath));

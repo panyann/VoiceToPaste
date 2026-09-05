@@ -699,5 +699,10 @@ namespace VoiceToPaste.Forms
             using var aboutForm = new AboutForm();
             aboutForm.ShowDialog(this);
         }
+
+        private void menuItemThemeToggle_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

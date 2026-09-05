@@ -33,6 +33,12 @@ namespace VoiceToPaste.Models
         public string UiLanguage { get; set; } = UiLanguages.GetSystemDefaultCode();
 
         /// <summary>
+        /// Motyw interfejsu: "dark" albo "light". Aplikacja nie śledzi motywu Windows —
+        /// motyw pochodzi wyłącznie z tego ustawienia, a zmiana działa bez restartu.
+        /// </summary>
+        public string SelectedTheme { get; set; } = AppThemes.Dark;
+
+        /// <summary>
         /// Określa, czy okno ustawień ma pozostać ukryte po uruchomieniu aplikacji.
         /// </summary>
         public bool StartInTray { get; set; }

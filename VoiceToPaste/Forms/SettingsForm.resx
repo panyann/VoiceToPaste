@@ -583,10 +583,32 @@
     <value>268, 17</value>
   </metadata>
   <data name="menuItemAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 36</value>
+    <value>114, 38</value>
   </data>
   <data name="menuItemAbout.Text" xml:space="preserve">
     <value>About...</value>
+  </data>
+  <data name="menuItemThemeToggle.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABGdBTUEAALGPC/xhBQAAAwdJREFUeF7t
+        Wstx5CAQVSh2Fj5uTQpbvvu0aWwWc/XVWWwW/pymyiFsAvJr1Iw+0yAZGgFGr+qVPQKa180fqTtwIB/6
+        t+4O/MU/20L/3v0De+aFH7eB/qP7O3F+IJ5x8s8HnH0WAvDMyT8fRwBqCoCZqUfBF41ZG/akOSA6AKQN
+        tmhyvRjN0M5J4WCDU7FkPGrCMkGd2+xjA8vOz21COyeHQzBK1AkCtRL1hsiWcjhvdHKWcMDIsgdcjccG
+        QQMe54kKPcBfAc0JT5x1d6xoix5WV5CTYgUDs+3iBC0jtZy38AZBu7INyKLHWanGcvNNkJMOLWkb4yYI
+        +M1Ju8OsIKMWlT3KJqCiYo6xrCVbIwTBiH7vTvj723D4f/dhtCv61+4Bjp7BT3AcQnNS2pnycrH6AYfu
+        wRd28DukMvdspk7AgUfwPzsUQir7yObqAsb0n4Uz4YQtNlsHIJpaXnYmnHX0BAilMR/T7V0km+XPCRAZ
+        MuFt5QtXUyZ4qZOE67HkJRICaZ2XhevxzNWVB4jzbXK0+MnVpYE5YAxXVSM3bFMpjyA2DbfqufXFf4MF
+        4+7rr5XDD/KcFmVS8sTVilhpDPkCB4V8tz6rr65Qng41clltoi6uVoRpbamcpdSY9FDMbAmjnFVEYQG4
+        fe8wpTSE6CESXUNAjtoEyFPLEHDfFJuCwsQhRmyBlUp1uVXP3A/jCyenAcTVvwzGAOIa3wi1vhUmQGS7
+        hyECRLZ9HCZAaLsXIhZYhtq9ErOA+HYvRS3gQLvX4lPwEtneixEJvG2u99WYcYBOjysHpD1gtfDP9DCO
+        T7tt6gOGB9AyvcNI/83SjfOWmXqCoCVdEJzOEzMEwKNHPwhe54kZJjCqU9QyUC8IG5zPNhGibt89ps4n
+        M8aQXEFW5y3WgsDZwiEYHRjpPMqP12+RQ8gTBIUAkMClYQ3n5zaju6sYBGjn5HAYsdRSSkIJYlAVJi0O
+        7PVzeX5cHhwBKFewNo4ANB8AecJKu48vCZPJygYg2yf32WCCgBWFyI8OHNgdXfcFPpQmShy73YwAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
+  <data name="menuItemThemeToggle.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 38</value>
   </data>
   <data name="menuStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -595,7 +617,7 @@
     <value>No</value>
   </data>
   <data name="menuStrip.Size" type="System.Drawing.Size, System.Drawing">
-    <value>794, 40</value>
+    <value>794, 42</value>
   </data>
   <data name="menuStrip.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -6882,6 +6904,12 @@
     <value>menuItemAbout</value>
   </data>
   <data name="&gt;&gt;menuItemAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemThemeToggle.Name" xml:space="preserve">
+    <value>menuItemThemeToggle</value>
+  </data>
+  <data name="&gt;&gt;menuItemThemeToggle.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
