@@ -43,15 +43,9 @@ namespace VoiceToPaste.Forms
             _hotkeyCapture = CreateHotkeyCapture();
         }
 
-        // Numer wersji zawiera metadane commitu po '+'; w tytule pokazujemy sam numer wersji.
         private void ApplyVersionToTitle()
         {
-            var productVersion = Application.ProductVersion;
-            var metadataSeparatorIndex = productVersion.IndexOf('+');
-            var displayedVersion = metadataSeparatorIndex >= 0
-                ? productVersion[..metadataSeparatorIndex]
-                : productVersion;
-            Text = UiStrings.Format("SettingsWindowTitleWithVersion", Text, displayedVersion);
+            Text = UiStrings.Format("SettingsWindowTitleWithVersion", Text, ApplicationVersionService.GetVersion());
         }
 
         // We fill the combos in code instead of the Designer — it is easier to keep the enum mapping.

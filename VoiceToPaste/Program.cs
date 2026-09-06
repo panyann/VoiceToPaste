@@ -48,7 +48,7 @@ namespace VoiceToPaste
                 // The mutex handle stays open until the process ends so a second instance
                 // cannot start service initialization or create its own tray icon.
                 Log.Information("=== Starting VoiceToPaste, version {ApplicationVersion}. ===",
-                    GetApplicationVersion());
+                    ApplicationVersionService.GetVersion());
                 ApplicationConfiguration.Initialize();
                 Application.ThreadException += (_, eventArgs) =>
                     Log.Error(eventArgs.Exception, "Unhandled exception on the UI thread.");
@@ -127,17 +127,6 @@ namespace VoiceToPaste
             {
                 StartNewInstance();
             }
-        }
-
-        private static string GetApplicationVersion()
-        {
-            var version = typeof(Program).Assembly.GetName().Version;
-            if (version == null)
-            {
-                return "unknown";
-            }
-
-            return version.ToString(3);
         }
 
         /// <summary>

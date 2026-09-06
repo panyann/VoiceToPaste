@@ -83,7 +83,7 @@
   <data name="SettingsAlreadyLoaded" xml:space="preserve"><value>The settings have already been loaded and cannot be loaded again.</value></data>
   <data name="SettingsNotLoaded" xml:space="preserve"><value>The settings have not been loaded yet.</value></data>
   <data name="SettingsSaveFailed" xml:space="preserve"><value>Failed to save settings: {0}</value></data>
-  <data name="SettingsWindowTitleWithVersion" xml:space="preserve"><value>{0} - v{1}</value></data>
+  <data name="SettingsWindowTitleWithVersion" xml:space="preserve"><value>{0} - {1}</value></data>
   <data name="Sha256LengthInvalid" xml:space="preserve"><value>The SHA-256 hash must be exactly 32 bytes long.</value></data>
 
   <!-- Transcription tester -->

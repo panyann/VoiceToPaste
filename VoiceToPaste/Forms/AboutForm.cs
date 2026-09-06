@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using VoiceToPaste.Resources;
+using VoiceToPaste.Services;
 
 namespace VoiceToPaste.Forms
 {
@@ -15,7 +16,7 @@ namespace VoiceToPaste.Forms
         {
             InitializeComponent();
             ApplyLocalizedResources();
-            label1.Text = GetApplicationVersion();
+            labelVersionValue.Text = ApplicationVersionService.GetVersion();
         }
 
         private void ApplyLocalizedResources()
@@ -25,9 +26,9 @@ namespace VoiceToPaste.Forms
             resources.ApplyResources(labelTitle, "labelTitle");
             resources.ApplyResources(btnKoFi, "btnKoFi");
             resources.ApplyResources(labelDonate, "labelDonate");
-            resources.ApplyResources(label2, "label2");
+            resources.ApplyResources(labelLicense, "label2");
             resources.ApplyResources(labelSource, "labelSource");
-            resources.ApplyResources(label3, "label3");
+            resources.ApplyResources(labelAuthorValue, "label3");
             resources.ApplyResources(labelAuthor, "labelAuthor");
             resources.ApplyResources(labelVersion, "labelVersion");
             resources.ApplyResources(btnGitHub, "btnGitHub");
@@ -54,18 +55,6 @@ namespace VoiceToPaste.Forms
         private void btnKoFi_Click(object sender, EventArgs e)
         {
             OpenUrl("https://ko-fi.com/panyann");
-        }
-
-        private static string GetApplicationVersion()
-        {
-            var productVersion = Application.ProductVersion;
-            var metadataSeparatorIndex = productVersion.IndexOf('+');
-            if (metadataSeparatorIndex < 0)
-            {
-                return productVersion;
-            }
-
-            return productVersion[..metadataSeparatorIndex];
         }
 
         private void OpenUrl(string url)

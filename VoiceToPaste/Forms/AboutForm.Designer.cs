@@ -37,11 +37,11 @@
             btnKoFi = new Button();
             imageListGitHub = new ImageList(components);
             labelDonate = new Label();
-            label2 = new Label();
+            labelLicense = new Label();
             labelSource = new Label();
-            label3 = new Label();
+            labelAuthorValue = new Label();
             labelAuthor = new Label();
-            label1 = new Label();
+            labelVersionValue = new Label();
             labelVersion = new Label();
             btnGitHub = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -102,11 +102,11 @@
             subTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             subTableLayoutPanel.Controls.Add(btnKoFi, 1, 4);
             subTableLayoutPanel.Controls.Add(labelDonate, 0, 4);
-            subTableLayoutPanel.Controls.Add(label2, 0, 3);
+            subTableLayoutPanel.Controls.Add(labelLicense, 0, 3);
             subTableLayoutPanel.Controls.Add(labelSource, 0, 2);
-            subTableLayoutPanel.Controls.Add(label3, 1, 1);
+            subTableLayoutPanel.Controls.Add(labelAuthorValue, 1, 1);
             subTableLayoutPanel.Controls.Add(labelAuthor, 0, 1);
-            subTableLayoutPanel.Controls.Add(label1, 1, 0);
+            subTableLayoutPanel.Controls.Add(labelVersionValue, 1, 0);
             subTableLayoutPanel.Controls.Add(labelVersion, 0, 0);
             subTableLayoutPanel.Controls.Add(btnGitHub, 1, 2);
             subTableLayoutPanel.Controls.Add(tableLayoutPanel1, 1, 3);
@@ -156,15 +156,15 @@
             labelDonate.TabIndex = 8;
             labelDonate.Text = "Donate:";
             // 
-            // label2
+            // labelLicense
             // 
-            label2.Anchor = AnchorStyles.None;
-            label2.AutoSize = true;
-            label2.Location = new Point(148, 257);
-            label2.Name = "label2";
-            label2.Size = new Size(97, 32);
-            label2.TabIndex = 6;
-            label2.Text = "License:";
+            labelLicense.Anchor = AnchorStyles.None;
+            labelLicense.AutoSize = true;
+            labelLicense.Location = new Point(148, 257);
+            labelLicense.Name = "labelLicense";
+            labelLicense.Size = new Size(97, 32);
+            labelLicense.TabIndex = 6;
+            labelLicense.Text = "License:";
             // 
             // labelSource
             // 
@@ -176,15 +176,15 @@
             labelSource.TabIndex = 4;
             labelSource.Text = "Source:";
             // 
-            // label3
+            // labelAuthorValue
             // 
-            label3.Anchor = AnchorStyles.None;
-            label3.AutoSize = true;
-            label3.Location = new Point(451, 76);
-            label3.Name = "label3";
-            label3.Size = new Size(278, 32);
-            label3.TabIndex = 3;
-            label3.Text = "Jan Grabowski (panyann)";
+            labelAuthorValue.Anchor = AnchorStyles.None;
+            labelAuthorValue.AutoSize = true;
+            labelAuthorValue.Location = new Point(451, 76);
+            labelAuthorValue.Name = "labelAuthorValue";
+            labelAuthorValue.Size = new Size(278, 32);
+            labelAuthorValue.TabIndex = 3;
+            labelAuthorValue.Text = "Jan Grabowski (panyann)";
             // 
             // labelAuthor
             // 
@@ -196,15 +196,15 @@
             labelAuthor.TabIndex = 2;
             labelAuthor.Text = "Author:";
             // 
-            // label1
+            // labelVersionValue
             // 
-            label1.Anchor = AnchorStyles.None;
-            label1.AutoSize = true;
-            label1.Location = new Point(576, 15);
-            label1.Name = "label1";
-            label1.Size = new Size(29, 32);
-            label1.TabIndex = 1;
-            label1.Text = "...";
+            labelVersionValue.Anchor = AnchorStyles.None;
+            labelVersionValue.AutoSize = true;
+            labelVersionValue.Location = new Point(576, 15);
+            labelVersionValue.Name = "labelVersionValue";
+            labelVersionValue.Size = new Size(29, 32);
+            labelVersionValue.TabIndex = 1;
+            labelVersionValue.Text = "...";
             // 
             // labelVersion
             // 
@@ -312,12 +312,12 @@
         private TableLayoutPanel subTableLayoutPanel;
         private Label labelVersion;
         private Label labelSource;
-        private Label label3;
+        private Label labelAuthorValue;
         private Label labelAuthor;
-        private Label label1;
+        private Label labelVersionValue;
         private Button btnGitHub;
         private Label labelDonate;
-        private Label label2;
+        private Label labelLicense;
         private TableLayoutPanel tableLayoutPanel1;
         private LinkLabel linkLabelPolyFormInternalUse;
         private Label labelOr;
