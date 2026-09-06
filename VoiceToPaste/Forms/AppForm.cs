@@ -10,7 +10,7 @@ namespace VoiceToPaste.Forms
     /// instance, so derived forms contain no theme code at all. The theme comes
     /// exclusively from application settings and never follows the Windows theme.
     /// </summary>
-    public class AppForm : Form
+    public partial class AppForm : Form
     {
         private DarkModeCS? _darkMode;
 
@@ -25,9 +25,11 @@ namespace VoiceToPaste.Forms
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
-            if (_darkMode == null && !IsInDesignMode())
+            // The Designer check must run first so design-time loading never initializes
+            // SettingsService or any of its application-owned paths.
+            if (_darkMode == null && !IsInDesignMode() && SettingsService.IsLoaded)
             {
-                _darkMode = new DarkModeCS(this)
+                _darkMode = new DarkModeCS(this, _ColorizeIcons: false)
                 {
                     ColorMode = ToDisplayMode(SettingsService.Settings.SelectedTheme),
                 };

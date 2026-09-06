@@ -26,5 +26,10 @@ They are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/
 The icons were modified with custom colors, sizing, a black circular underlay, and
 conversion from SVG to ICO.
 
+The theme icons in `VoiceToPaste/Resources` are based on
+["sun-fill" from Akar Icons](https://icon-sets.iconify.design/akar-icons/sun-fill/)
+and ["moon-filled" from Ant Design Icons](https://icon-sets.iconify.design/ant-design/moon-filled/).
+They are licensed under [MIT](https://licenses.nuget.org/MIT).
+
 Package versions and dependency licenses should be reviewed again whenever a package
 reference changes.

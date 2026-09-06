@@ -32,6 +32,7 @@ namespace VoiceToPaste.Forms
             _settings = SettingsService.Settings;
             _whisperEngineChangeWorkflow = new WhisperEngineChangeWorkflow();
             InitializeComponent();
+            UpdateThemeToggleIcon();
             ApplyVersionToTitle();
             InitializeEngineCombo();
             InitializeLanguageCombo();
@@ -689,7 +690,49 @@ namespace VoiceToPaste.Forms
 
         private void menuItemThemeToggle_Click(object sender, EventArgs e)
         {
+            var previousTheme = _settings.SelectedTheme;
+            var selectedTheme = GetOppositeTheme(previousTheme);
+            _settings.SelectedTheme = selectedTheme;
 
+            try
+            {
+                SettingsService.Save();
+                ApplySelectedTheme();
+                UpdateThemeToggleIcon();
+                Logger.Information("Changed the application theme from {PreviousTheme} to {SelectedTheme}.", previousTheme, selectedTheme);
+            }
+            catch (Exception ex)
+            {
+                _settings.SelectedTheme = previousTheme;
+                Logger.Error(ex, "Failed to save the application theme selection.");
+                MessageBox.Show(
+                    this,
+                    UiStrings.Format("SettingsSaveFailed", LocalizedExceptionFactory.GetUserMessage(ex)),
+                    UiStrings.Get("ApplicationTitle"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private static string GetOppositeTheme(string selectedTheme)
+        {
+            if (AppThemes.Normalize(selectedTheme) == AppThemes.Dark)
+            {
+                return AppThemes.Light;
+            }
+
+            return AppThemes.Dark;
+        }
+
+        private void UpdateThemeToggleIcon()
+        {
+            if (_settings.SelectedTheme == AppThemes.Light)
+            {
+                menuItemThemeToggle.Image = VoiceToPaste.Properties.Resources.themeIconLight;
+                return;
+            }
+
+            menuItemThemeToggle.Image = VoiceToPaste.Properties.Resources.themeIconDark;
         }
     }
 }

@@ -590,21 +590,21 @@
   </data>
   <data name="menuItemThemeToggle.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABGdBTUEAALGPC/xhBQAAAwdJREFUeF7t
-        Wstx5CAQVSh2Fj5uTQpbvvu0aWwWc/XVWWwW/pymyiFsAvJr1Iw+0yAZGgFGr+qVPQKa180fqTtwIB/6
-        t+4O/MU/20L/3v0De+aFH7eB/qP7O3F+IJ5x8s8HnH0WAvDMyT8fRwBqCoCZqUfBF41ZG/akOSA6AKQN
-        tmhyvRjN0M5J4WCDU7FkPGrCMkGd2+xjA8vOz21COyeHQzBK1AkCtRL1hsiWcjhvdHKWcMDIsgdcjccG
-        QQMe54kKPcBfAc0JT5x1d6xoix5WV5CTYgUDs+3iBC0jtZy38AZBu7INyKLHWanGcvNNkJMOLWkb4yYI
-        +M1Ju8OsIKMWlT3KJqCiYo6xrCVbIwTBiH7vTvj723D4f/dhtCv61+4Bjp7BT3AcQnNS2pnycrH6AYfu
-        wRd28DukMvdspk7AgUfwPzsUQir7yObqAsb0n4Uz4YQtNlsHIJpaXnYmnHX0BAilMR/T7V0km+XPCRAZ
-        MuFt5QtXUyZ4qZOE67HkJRICaZ2XhevxzNWVB4jzbXK0+MnVpYE5YAxXVSM3bFMpjyA2DbfqufXFf4MF
-        4+7rr5XDD/KcFmVS8sTVilhpDPkCB4V8tz6rr65Qng41clltoi6uVoRpbamcpdSY9FDMbAmjnFVEYQG4
-        fe8wpTSE6CESXUNAjtoEyFPLEHDfFJuCwsQhRmyBlUp1uVXP3A/jCyenAcTVvwzGAOIa3wi1vhUmQGS7
-        hyECRLZ9HCZAaLsXIhZYhtq9ErOA+HYvRS3gQLvX4lPwEtneixEJvG2u99WYcYBOjysHpD1gtfDP9DCO
-        T7tt6gOGB9AyvcNI/83SjfOWmXqCoCVdEJzOEzMEwKNHPwhe54kZJjCqU9QyUC8IG5zPNhGibt89ps4n
-        M8aQXEFW5y3WgsDZwiEYHRjpPMqP12+RQ8gTBIUAkMClYQ3n5zaju6sYBGjn5HAYsdRSSkIJYlAVJi0O
-        7PVzeX5cHhwBKFewNo4ANB8AecJKu48vCZPJygYg2yf32WCCgBWFyI8OHNgdXfcFPpQmShy73YwAAAAA
-        SUVORK5CYII=
+        iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAMrSURBVHhe7VrbcdswEGQpSRf59LiFjP/zlTbURX79GTtJDyolMynBDTB7wPJ9hCjiSIACd2bH
+        Egne7R3Aw8OqTpxIh/pn9an+XT3xa1lA4FewdvxT/eXlMoCgL23wHS+8/fhAj79OEoBrvP34OBNwpAS4
+        St0IRrHC3+iqDRvTGmCQANh5Aq9Op2iGdt5aD2dwKFSSEFWwOP0NExCZWHl+ZE945e31UIzaJcGPrEts
+        T8GGFrzTySbrAUPDEdAzjr/Jpy5o0IP3NBkB8w4kCb+qb2y6O6AhFLzQZpUpQSrGPS2G2UqoejraLrGD
+        SbB2tgBJ9Mw6tZhu7gT8zg3/bTtjkgR8563dAf/desIX5X1GIufx3Ye9BqclYSesAkU/1+/VV0f5nOA1
+        2hX1W/UFw/QH+K8dtmPKPWmDtnzs+EDvfgbf1IBDlGfwLM0cEwjkBfwYBHYf5dkXmjsW0HvfR8GsJ2zR
+        7DEA0dLzejDreYyRIO8txMYM+zl+HKImoIrfX/CWEoWRbvKEm+o04ZbMeYp0c7gm2pLwQXf5wS1kNNGW
+        hA+62wZwcoGT1wEXLFO5P9BFW3O5nmEst06w0CB0/BXc/KBAPU+e24rwRbcqgp0xd4ADo6EDBmEwe25T
+        oz9nT/iiWxXsbf1Zz2lnysVRoyFhlE1VZJWA/jmBRu0V4rDRXwHPx3gFQifFc4VDzdgIN5zacqmefhyM
+        hbe3AZwcfxqMAcQVvhAqfSksQIEqdzMkgMiyt8MCiC33QKQBeqvcI7EGEF/uoWgDVxNKPRbvw02Rsk4I
+        LZbknrTJfaqLhVumyt5BNlBC+bxgeZsNuO6X3WPyf5A2Wvh1ezDw/tBN9jshjJzuDMMf2my82ZkG3zDJ
+        SJjo2DIJMBw6MNk9AeJzpMFziyTAYCj4ND+R8e++rscyCTAUDj5B7zcY1IAxfRLitdGQ7iRh8A1uJYHN
+        1kM17BkVPIewP36LfIVmk2CSAH+WNjZuEXxnz2C4qkmAdt5ej7anjIQKRFgrsmN00aLW9ufyvJwf1ATk
+        LNgaZwKKT4Betbddx+eEtlg1wVtMV0cDkyCrzOSLqRPloqr+A/znbBG3twNdAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="menuItemThemeToggle.Size" type="System.Drawing.Size, System.Drawing">
@@ -637,6 +637,9 @@
   <data name="&gt;&gt;menuStrip.ZOrder" xml:space="preserve">
     <value>18</value>
   </data>
+  <metadata name="toolTipThemeToggle.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>455, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -6912,10 +6915,16 @@
   <data name="&gt;&gt;menuItemThemeToggle.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;toolTipThemeToggle.Name" xml:space="preserve">
+    <value>toolTipThemeToggle</value>
+  </data>
+  <data name="&gt;&gt;toolTipThemeToggle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>SettingsForm</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>VoiceToPaste.Forms.AppForm, VoiceToPaste, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>

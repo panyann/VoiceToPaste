@@ -24,6 +24,8 @@ namespace VoiceToPaste.Services
 
         public static string SettingsPath { get; private set; } = GetSettingsPath(ApplicationPaths.Directory);
 
+        internal static bool IsLoaded => _settings != null;
+
         /// <summary>
         /// The process-wide settings — a single instance mutated live by consumers and
         /// flushed to disk by the parameterless Save. Throws before the first Load,

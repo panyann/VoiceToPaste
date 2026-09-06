@@ -52,6 +52,7 @@
             menuStrip = new MenuStrip();
             menuItemAbout = new ToolStripMenuItem();
             menuItemThemeToggle = new ToolStripMenuItem();
+            toolTipThemeToggle = new ToolTip(components);
             menuStrip.SuspendLayout();
             SuspendLayout();
             // 
@@ -248,5 +249,6 @@
         private MenuStrip menuStrip;
         private ToolStripMenuItem menuItemAbout;
         private ToolStripMenuItem menuItemThemeToggle;
+        private ToolTip toolTipThemeToggle;
     }
 }
