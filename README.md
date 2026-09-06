@@ -9,7 +9,8 @@ Use it to dictate prompts, messages, emails, and other text in applications that
 support standard clipboard pasting.
 
 <p align="center">
-  <img src="./Assets/Images/preview.png" width="70%">
+  <img src="./Assets/Images/light.png" width="49%">
+  <img src="./Assets/Images/dark.png" width="49%">
 </p>
 <img src="./Assets/GIFs/demo.gif">
 
