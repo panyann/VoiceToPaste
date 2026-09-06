@@ -19,17 +19,15 @@ The CUDA runtime license is included in distributed application output as
 
 ## Icons
 
-The microphone icons in `VoiceToPaste/Assets/Icons` are based on
-["Microphone Circle Filled" from Pepicons Pencil by CyCraft](https://icon-sets.iconify.design/pepicons-pencil/microphone-circle-filled/).
-They are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+| Icon | License |
+| --- | --- |
+| [microphone-circle-filled (Pepicons Pencil)](https://icon-sets.iconify.design/pepicons-pencil/microphone-circle-filled/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| [sun-fill (Akar Icons)](https://icon-sets.iconify.design/akar-icons/sun-fill/) | [MIT](https://licenses.nuget.org/MIT) |
+| [moon-filled (Ant Design Icons)](https://icon-sets.iconify.design/ant-design/moon-filled/) | [MIT](https://licenses.nuget.org/MIT) |
+| [github-dark (selfh.st/icons)](https://icon-sets.iconify.design/selfhst/github-dark/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| [coffee-cup (Iconoir)](https://icon-sets.iconify.design/iconoir/coffee-cup/) | [MIT](https://licenses.nuget.org/MIT) |
 
-The icons were modified with custom colors, sizing, a black circular underlay, and
-conversion from SVG to ICO.
-
-The theme icons in `VoiceToPaste/Resources` are based on
-["sun-fill" from Akar Icons](https://icon-sets.iconify.design/akar-icons/sun-fill/)
-and ["moon-filled" from Ant Design Icons](https://icon-sets.iconify.design/ant-design/moon-filled/).
-They are licensed under [MIT](https://licenses.nuget.org/MIT).
+CC BY 4.0 icons are used with modifications (colors, size, format).
 
 Package versions and dependency licenses should be reviewed again whenever a package
 reference changes.
