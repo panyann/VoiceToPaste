@@ -549,7 +549,7 @@ namespace DarkModeForms
                 button.FlatAppearance.CheckedBackColor = OScolors.Accent;
                 button.BackColor = OScolors.Control;
                 button.FlatAppearance.BorderColor = (OwnerForm.AcceptButton == button) ?
-                  OScolors.Accent : OScolors.Control;
+                  OScolors.Accent : OScolors.ButtonBorder;
             }
             if (control is ComboBox comboBox)
             {
@@ -991,10 +991,13 @@ namespace DarkModeForms
         /// <summary>Returns Windows's System Colors for UI components following Google Material Design concepts.</summary>
         /// <param name="Window">[OPTIONAL] Applies DarkMode (if set) to this Window Title and Background.</param>
         /// <returns>List of Colors:  Background, OnBackground, Surface, OnSurface, Primary, OnPrimary, Secondary, OnSecondary</returns>
-        public static OSThemeColors GetSystemColors(Form Window = null, int ColorMode = 0) //<- O: DarkMode, 1: LightMode
+        public static OSThemeColors GetSystemColors(Form Window = null, int ColorMode = 0)
         {
             OSThemeColors _ret = new OSThemeColors();
+            _ret.Accent = GetWindowsAccentColor();
+            _ret.AccentOpaque = GetWindowsAccentOpaqueColor();
 
+            // Non-positive values select dark mode; positive values select light mode.
             if (ColorMode <= 0)
             {
                 _ret.Background = Color.FromArgb(32, 32, 32);   //<- Negro Claro
@@ -1012,11 +1015,36 @@ namespace DarkModeForms
                 _ret.Control = Color.FromArgb(55, 55, 55);       //<- Gris Oscuro
                 _ret.ControlDark = ControlPaint.Dark(_ret.Control);
                 _ret.ControlLight = Color.FromArgb(67, 67, 67);
+                _ret.ButtonBorder = Color.FromArgb(112, 112, 112);
+                _ret.MenuHighlight = _ret.Control;
+                _ret.MenuPressed = _ret.ControlLight;
 
                 _ret.Primary = Color.FromArgb(3, 218, 198);   //<- Verde Pastel
                 _ret.Secondary = Color.MediumSlateBlue;         //<- Magenta Claro
+            }
+            else
+            {
+                _ret.Background = SystemColors.Control;
+                _ret.BackgroundDark = SystemColors.ControlDark;
+                _ret.BackgroundLight = SystemColors.ControlLight;
 
+                _ret.Surface = SystemColors.ControlLightLight;
+                _ret.SurfaceLight = Color.White;
+                _ret.SurfaceDark = SystemColors.ControlLight;
 
+                _ret.TextActive = SystemColors.ControlText;
+                _ret.TextInactive = SystemColors.GrayText;
+                _ret.TextInAccent = SystemColors.HighlightText;
+
+                _ret.Control = SystemColors.ButtonFace;
+                _ret.ControlDark = SystemColors.ButtonShadow;
+                _ret.ControlLight = SystemColors.ButtonHighlight;
+                _ret.ButtonBorder = SystemColors.ButtonShadow;
+                _ret.MenuHighlight = Color.FromArgb(216, 216, 216);
+                _ret.MenuPressed = Color.FromArgb(208, 208, 208);
+
+                _ret.Primary = SystemColors.Highlight;
+                _ret.Secondary = SystemColors.HotTrack;
             }
 
             return _ret;
@@ -1249,67 +1277,72 @@ namespace DarkModeForms
         #endregion Private Methods
     }
 
-    /// <summary>Windows 10+ System Colors for Clear Color Mode.</summary>
+    /// <summary>Theme colors for UI components.</summary>
     public class OSThemeColors
     {
-        public OSThemeColors()
-        {
-        }
-
         /// <summary>For the very back of the Window</summary>
-        public Color Background { get; set; } = SystemColors.Control;
+        public Color Background { get; set; }
 
         /// <summary>For Borders around the Background</summary>
-        public Color BackgroundDark { get; set; } = SystemColors.ControlDark;
+        public Color BackgroundDark { get; set; }
 
         /// <summary>For hightlights over the Background</summary>
-        public Color BackgroundLight { get; set; } = SystemColors.ControlLight;
+        public Color BackgroundLight { get; set; }
 
         /// <summary>For Container above the Background</summary>
-        public Color Surface { get; set; } = SystemColors.ControlLightLight;
+        public Color Surface { get; set; }
 
         /// <summary>For Borders around the Surface</summary>
-        public Color SurfaceDark { get; set; } = SystemColors.ControlLight;
+        public Color SurfaceDark { get; set; }
 
         /// <summary>For Highligh over the Surface</summary>
-        public Color SurfaceLight { get; set; } = Color.White;
+        public Color SurfaceLight { get; set; }
 
         /// <summary>For Main Texts</summary>
-        public Color TextActive { get; set; } = SystemColors.ControlText;
+        public Color TextActive { get; set; }
 
         /// <summary>For Inactive Texts</summary>
-        public Color TextInactive { get; set; } = SystemColors.GrayText;
+        public Color TextInactive { get; set; }
 
         /// <summary>For Hightligh Texts</summary>
-        public Color TextInAccent { get; set; } = SystemColors.HighlightText;
+        public Color TextInAccent { get; set; }
 
         /// <summary>For the background of any Control</summary>
-        public Color Control { get; set; } = SystemColors.ButtonFace;
+        public Color Control { get; set; }
 
         /// <summary>For Bordes of any Control</summary>
-        public Color ControlDark { get; set; } = SystemColors.ButtonShadow;
+        public Color ControlDark { get; set; }
 
         /// <summary>For Highlight elements in a Control</summary>
-        public Color ControlLight { get; set; } = SystemColors.ButtonHighlight;
+        public Color ControlLight { get; set; }
+
+        /// <summary>For borders around buttons</summary>
+        public Color ButtonBorder { get; set; }
+
+        /// <summary>For hovered menu items</summary>
+        public Color MenuHighlight { get; set; }
+
+        /// <summary>For pressed menu items</summary>
+        public Color MenuPressed { get; set; }
 
         /// <summary>Windows 10+ Chosen Accent Color</summary>
-        public Color Accent { get; set; } = DarkModeCS.GetWindowsAccentColor();
+        public Color Accent { get; set; }
 
-        public Color AccentOpaque { get; set; } = DarkModeCS.GetWindowsAccentOpaqueColor();
+        public Color AccentOpaque { get; set; }
 
         public Color AccentDark { get { return ControlPaint.Dark(Accent); } }
 
         public Color AccentLight { get { return ControlPaint.Light(Accent); } }
 
         /// <summary>the color displayed most frequently across your app's screens and components.</summary>
-        public Color Primary { get; set; } = SystemColors.Highlight;
+        public Color Primary { get; set; }
 
         public Color PrimaryDark { get { return ControlPaint.Dark(Primary); } }
 
         public Color PrimaryLight { get { return ControlPaint.Light(Primary); } }
 
         /// <summary>to accent select parts of your UI.</summary>
-        public Color Secondary { get; set; } = SystemColors.HotTrack;
+        public Color Secondary { get; set; }
 
         public Color SecondaryDark { get { return ControlPaint.Dark(Secondary); } }
 
@@ -1569,14 +1602,14 @@ namespace DarkModeForms
             var _menu = e.Item;
             if (_menu.Pressed)
             {
-                gradientBegin = MyColors.Control; // Color.FromArgb(254, 128, 62);
-                gradientEnd = MyColors.Control; // Color.FromArgb(255, 223, 154);
+                gradientBegin = MyColors.MenuPressed;
+                gradientEnd = MyColors.MenuPressed;
                 DrawIt = true;
             }
             else if (_menu.Selected)
             {
-                gradientBegin = MyColors.Accent;// Color.FromArgb(255, 255, 222);
-                gradientEnd = MyColors.Accent; // Color.FromArgb(255, 203, 136);
+                gradientBegin = MyColors.MenuHighlight;
+                gradientEnd = MyColors.MenuHighlight;
                 DrawIt = true;
             }
 

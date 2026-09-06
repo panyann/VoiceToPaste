@@ -1,7 +1,9 @@
 # Third-party notices
 
-VoiceToPaste uses the following direct NuGet dependencies. Their licenses apply to
+VoiceToPaste uses the following third-party components. Their licenses apply to
 those components independently of the VoiceToPaste license.
+
+## NuGet dependencies
 
 | Component | Version | License |
 | --- | --- | --- |
@@ -16,6 +18,15 @@ those components independently of the VoiceToPaste license.
 
 The CUDA runtime license is included in distributed application output as
 [`VoiceToPaste/licenses/NVIDIA-CUDA-TOOLKIT-EULA.txt`](VoiceToPaste/licenses/NVIDIA-CUDA-TOOLKIT-EULA.txt).
+
+## Vendored source code
+
+| Component | Source | License |
+| --- | --- | --- |
+| Dark Mode Forms | [BlueMystical/Dark-Mode-Forms](https://github.com/BlueMystical/Dark-Mode-Forms) | MIT |
+
+The `VoiceToPaste/Style/DarkModeCS.cs` source file is a locally modified copy of
+Dark Mode Forms.
 
 ## Icons
 

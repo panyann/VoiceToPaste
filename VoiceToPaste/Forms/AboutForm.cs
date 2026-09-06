@@ -89,5 +89,10 @@ namespace VoiceToPaste.Forms
                     MessageBoxIcon.Error);
             }
         }
+
+        private void AboutForm_Shown(object sender, EventArgs e)
+        {
+            ActiveControl = null;
+        }
     }
 }

@@ -125,6 +125,10 @@
   <data name="btnTester.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 603</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnTester.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
   <data name="btnTester.Size" type="System.Drawing.Size, System.Drawing">
     <value>794, 46</value>
   </data>
@@ -583,32 +587,32 @@
     <value>268, 17</value>
   </metadata>
   <data name="menuItemAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 38</value>
+    <value>114, 36</value>
   </data>
   <data name="menuItemAbout.Text" xml:space="preserve">
     <value>About...</value>
   </data>
   <data name="menuItemThemeToggle.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        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
+        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
 </value>
   </data>
   <data name="menuItemThemeToggle.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 38</value>
+    <value>52, 36</value>
   </data>
   <data name="menuStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -617,7 +621,7 @@
     <value>No</value>
   </data>
   <data name="menuStrip.Size" type="System.Drawing.Size, System.Drawing">
-    <value>794, 42</value>
+    <value>794, 40</value>
   </data>
   <data name="menuStrip.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>

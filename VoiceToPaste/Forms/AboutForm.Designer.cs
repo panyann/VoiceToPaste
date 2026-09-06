@@ -35,6 +35,7 @@
             labelTitle = new Label();
             subTableLayoutPanel = new TableLayoutPanel();
             btnKoFi = new Button();
+            imageListGitHub = new ImageList(components);
             labelDonate = new Label();
             label2 = new Label();
             labelSource = new Label();
@@ -47,7 +48,6 @@
             linkLabelPolyFormInternalUse = new LinkLabel();
             labelOr = new Label();
             linkLabelPolyFormNoncommercial = new LinkLabel();
-            imageListGitHub = new ImageList(components);
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             subTableLayoutPanel.SuspendLayout();
@@ -137,6 +137,14 @@
             btnKoFi.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnKoFi.UseVisualStyleBackColor = true;
             btnKoFi.Click += btnKoFi_Click;
+            // 
+            // imageListGitHub
+            // 
+            imageListGitHub.ColorDepth = ColorDepth.Depth32Bit;
+            imageListGitHub.ImageStream = (ImageListStreamer)resources.GetObject("imageListGitHub.ImageStream");
+            imageListGitHub.TransparentColor = Color.Transparent;
+            imageListGitHub.Images.SetKeyName(0, "selfhst--github-dark.png");
+            imageListGitHub.Images.SetKeyName(1, "iconoir--coffee-cup.png");
             // 
             // labelDonate
             // 
@@ -274,14 +282,6 @@
             linkLabelPolyFormNoncommercial.Text = "PolyForm Noncommercial";
             linkLabelPolyFormNoncommercial.LinkClicked += linkLabelPolyFormNoncommercial_LinkClicked;
             // 
-            // imageListGitHub
-            // 
-            imageListGitHub.ColorDepth = ColorDepth.Depth32Bit;
-            imageListGitHub.ImageStream = (ImageListStreamer)resources.GetObject("imageListGitHub.ImageStream");
-            imageListGitHub.TransparentColor = Color.Transparent;
-            imageListGitHub.Images.SetKeyName(0, "selfhst--github-dark.png");
-            imageListGitHub.Images.SetKeyName(1, "iconoir--coffee-cup.png");
-            // 
             // AboutForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -293,6 +293,7 @@
             Name = "AboutForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "About VoiceToPaste";
+            Shown += AboutForm_Shown;
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).EndInit();
