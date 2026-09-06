@@ -10,13 +10,17 @@ namespace VoiceToPaste.Services
     /// <summary>
     /// Reads and writes settings in the settings.yaml file next to the executable.
     /// A missing or corrupted file never crashes the application — defaults are
-    /// restored, the file is repaired, and details are reported in LastLoadDiagnostic.
+    /// restored, the file is repaired, and repair details are written to the log.
     /// </summary>
     public sealed class SettingsService
     {
         private static readonly ILogger Logger = Log.ForContext<SettingsService>();
         private const string SettingsFileName = "settings.yaml";
         private AppSettings? _settings;
+
+        // Set by the repair methods after an actual change, so the file is written again
+        // only when a repair really happened. Reset at the start of each repair pass.
+        private bool _settingsChanged;
 
         public SettingsService()
             : this(ApplicationPaths.Directory)
@@ -30,9 +34,6 @@ namespace VoiceToPaste.Services
         }
 
         public string SettingsPath { get; }
-
-        /// <summary>Diagnostic message from the most recent load; null when the load was clean.</summary>
-        public string? LastLoadDiagnostic { get; private set; }
 
         /// <summary>
         /// The process-wide settings — a single instance mutated live by consumers and
@@ -61,12 +62,11 @@ namespace VoiceToPaste.Services
                 throw LocalizedExceptionFactory.InvalidOperation("SettingsAlreadyLoaded");
 
             Logger.Information("Starting settings load.");
-            LastLoadDiagnostic = null;
 
             if (!File.Exists(SettingsPath))
             {
                 Logger.Warning("Settings file was not found. Default values will be restored.");
-                return RestoreDefaults("Brak pliku settings.yaml — utworzono go z ustawieniami domyślnymi.");
+                return RestoreDefaults();
             }
 
             try
@@ -78,76 +78,13 @@ namespace VoiceToPaste.Services
                 if (settings == null)
                 {
                     Logger.Warning("Settings file is empty. Default values will be restored.");
-                    return RestoreDefaults("Plik settings.yaml był pusty — przywrócono ustawienia domyślne.");
+                    return RestoreDefaults();
                 }
 
                 // The instance must be reachable through Settings before any repair save runs.
                 _settings = settings;
 
-                var repairs = new List<string>();
-
-                // An explicit keyWords: null entry must not crash the editor or later replacement.
-                settings.KeyWords ??= [];
-                if (settings.WhisperModelId != null && WhisperModelCatalog.TryGetById(settings.WhisperModelId) == null)
-                {
-                    Logger.Warning("Invalid Whisper model identifier {ModelId}. Model selection will be disabled.",
-                        settings.WhisperModelId);
-                    settings.WhisperModelId = null;
-                    repairs.Add("Nieprawidłowy model Whisper — wyłączono wybór modelu.");
-                }
-
-                var normalizedLanguage = TranscriptionLanguages.Normalize(settings.TranscribeLanguage);
-                if (!string.Equals(settings.TranscribeLanguage, normalizedLanguage, StringComparison.Ordinal))
-                {
-                    Logger.Warning("Invalid transcription language code {LanguageCode}. {NormalizedLanguageCode} will be used.",
-                        settings.TranscribeLanguage,
-                        normalizedLanguage);
-                    settings.TranscribeLanguage = normalizedLanguage;
-                    repairs.Add("Nieprawidłowy język transkrypcji — przywrócono bezpieczną wartość domyślną.");
-                }
-
-                var normalizedUiLanguage = UiLanguages.Normalize(settings.UiLanguage);
-                if (!string.Equals(settings.UiLanguage, normalizedUiLanguage, StringComparison.Ordinal))
-                {
-                    Logger.Warning("Invalid UI language code {LanguageCode}. {NormalizedLanguageCode} will be used.",
-                        settings.UiLanguage,
-                        normalizedUiLanguage);
-                    settings.UiLanguage = normalizedUiLanguage;
-                    repairs.Add("Nieprawidłowy język interfejsu — przywrócono bezpieczną wartość domyślną.");
-                }
-
-                // The theme is a plain string, so an unknown value repairs only this field
-                // instead of resetting the whole file like a broken enum would.
-                var normalizedTheme = AppThemes.Normalize(settings.SelectedTheme);
-                if (!string.Equals(settings.SelectedTheme, normalizedTheme, StringComparison.Ordinal))
-                {
-                    Logger.Warning("Invalid selected theme {SelectedTheme}. {NormalizedTheme} will be used.",
-                        settings.SelectedTheme,
-                        normalizedTheme);
-                    settings.SelectedTheme = normalizedTheme;
-                    repairs.Add("Nieprawidłowy motyw interfejsu — przywrócono bezpieczną wartość.");
-                }
-
-                if (settings.Hotkey != null && !settings.Hotkey.IsValid(out _))
-                {
-                    Logger.Warning("Invalid global hotkey. The default hotkey will be restored.");
-                    settings.Hotkey = HotkeyGesture.CreateDefault();
-                    repairs.Add("Nieprawidłowy skrót globalny — przywrócono Ctrl + Shift + Space.");
-                }
-
-                if (settings.RecordingLimitSeconds < AppSettings.MinimumRecordingLimitSeconds ||
-                    settings.RecordingLimitSeconds > AppSettings.MaximumRecordingLimitSeconds)
-                {
-                    Logger.Warning(
-                        "Invalid recording limit {RecordingLimitSeconds}. {DefaultRecordingLimitSeconds} seconds will be used.",
-                        settings.RecordingLimitSeconds,
-                        AppSettings.DefaultRecordingLimitSeconds);
-                    settings.RecordingLimitSeconds = AppSettings.DefaultRecordingLimitSeconds;
-                    repairs.Add("Nieprawidłowy limit nagrywania — przywrócono 60 sekund.");
-                }
-
-                if (repairs.Count > 0)
-                    RepairSettings(string.Join(" ", repairs));
+                RepairLoadedSettings(settings);
 
                 Logger.Information("Loaded settings with backend {Backend}.", settings.TranscriptionEngine);
                 return settings;
@@ -155,9 +92,118 @@ namespace VoiceToPaste.Services
             catch (Exception ex) when (ex is YamlException or IOException or UnauthorizedAccessException)
             {
                 Logger.Warning(ex, "Failed to load settings. Default values will be restored.");
-                return RestoreDefaults(
-                    $"Nie udało się odczytać settings.yaml ({ex.Message}) — przywrócono ustawienia domyślne.");
+                return RestoreDefaults();
             }
+        }
+
+        /// <summary>
+        /// Repairs every loaded setting and saves the file again when something actually
+        /// changed. Repair details go to the log only — they never reach the UI.
+        /// </summary>
+        private void RepairLoadedSettings(AppSettings settings)
+        {
+            _settingsChanged = false;
+
+            RepairKeyWords(settings);
+            RepairWhisperModel(settings);
+            NormalizeTranscriptionLanguage(settings);
+            NormalizeUiLanguage(settings);
+            NormalizeSelectedTheme(settings);
+            RepairHotkey(settings);
+            RepairRecordingLimit(settings);
+
+            if (!_settingsChanged)
+                return;
+
+            SaveRepairedSettings();
+        }
+
+        // Each method below repairs exactly one setting. When a value needs fixing, the
+        // method logs it, assigns a safe replacement, and sets _settingsChanged so the
+        // file is written again.
+        private void RepairKeyWords(AppSettings settings)
+        {
+            // An explicit keyWords: null entry must not crash the editor or later replacement.
+            settings.KeyWords ??= [];
+        }
+
+        private void RepairWhisperModel(AppSettings settings)
+        {
+            if (settings.WhisperModelId == null)
+                return;
+
+            if (WhisperModelCatalog.TryGetById(settings.WhisperModelId) != null)
+                return;
+
+            Logger.Warning("Invalid Whisper model identifier {ModelId}. Model selection will be disabled.",
+                settings.WhisperModelId);
+            settings.WhisperModelId = null;
+            _settingsChanged = true;
+        }
+
+        private void NormalizeTranscriptionLanguage(AppSettings settings)
+        {
+            var normalizedLanguage = TranscriptionLanguages.Normalize(settings.TranscribeLanguage);
+            if (string.Equals(settings.TranscribeLanguage, normalizedLanguage, StringComparison.Ordinal))
+                return;
+
+            Logger.Warning("Invalid transcription language code {LanguageCode}. {NormalizedLanguageCode} will be used.",
+                settings.TranscribeLanguage,
+                normalizedLanguage);
+            settings.TranscribeLanguage = normalizedLanguage;
+            _settingsChanged = true;
+        }
+
+        private void NormalizeUiLanguage(AppSettings settings)
+        {
+            var normalizedUiLanguage = UiLanguages.Normalize(settings.UiLanguage);
+            if (string.Equals(settings.UiLanguage, normalizedUiLanguage, StringComparison.Ordinal))
+                return;
+
+            Logger.Warning("Invalid UI language code {LanguageCode}. {NormalizedLanguageCode} will be used.",
+                settings.UiLanguage,
+                normalizedUiLanguage);
+            settings.UiLanguage = normalizedUiLanguage;
+            _settingsChanged = true;
+        }
+
+        // The theme is a plain string, so an unknown value repairs only this field
+        // instead of resetting the whole file like a broken enum would.
+        private void NormalizeSelectedTheme(AppSettings settings)
+        {
+            var normalizedTheme = AppThemes.Normalize(settings.SelectedTheme);
+            if (string.Equals(settings.SelectedTheme, normalizedTheme, StringComparison.Ordinal))
+                return;
+
+            Logger.Warning("Invalid selected theme {SelectedTheme}. {NormalizedTheme} will be used.",
+                settings.SelectedTheme,
+                normalizedTheme);
+            settings.SelectedTheme = normalizedTheme;
+            _settingsChanged = true;
+        }
+
+        private void RepairHotkey(AppSettings settings)
+        {
+            if (settings.Hotkey == null || settings.Hotkey.IsValid(out _))
+                return;
+
+            Logger.Warning("Invalid global hotkey. The default hotkey will be restored.");
+            settings.Hotkey = HotkeyGesture.CreateDefault();
+            _settingsChanged = true;
+        }
+
+        private void RepairRecordingLimit(AppSettings settings)
+        {
+            if (settings.RecordingLimitSeconds >= AppSettings.MinimumRecordingLimitSeconds &&
+                settings.RecordingLimitSeconds <= AppSettings.MaximumRecordingLimitSeconds)
+                return;
+
+            Logger.Warning(
+                "Invalid recording limit {RecordingLimitSeconds}. {DefaultRecordingLimitSeconds} seconds will be used.",
+                settings.RecordingLimitSeconds,
+                AppSettings.DefaultRecordingLimitSeconds);
+            settings.RecordingLimitSeconds = AppSettings.DefaultRecordingLimitSeconds;
+            _settingsChanged = true;
         }
 
         /// <summary>
@@ -188,31 +234,30 @@ namespace VoiceToPaste.Services
         }
 
         /// <summary>
-        /// Returns default settings and tries to repair the file on disk so the user has a
-        /// valid starting point for manual editing. A repair write error is only appended to
-        /// the diagnostics — the load must not fail on it.
+        /// Returns default settings and writes them to disk so the user has a valid
+        /// starting point for manual editing. A write error is only logged — the load
+        /// must not fail on it, because memory already holds valid settings.
         /// </summary>
-        private AppSettings RestoreDefaults(string diagnostic)
+        private AppSettings RestoreDefaults()
         {
             var defaults = new AppSettings();
 
             _settings = defaults;
-            RepairSettings(diagnostic);
+            SaveRepairedSettings();
             return defaults;
         }
 
-        private void RepairSettings(string diagnostic)
+        /// <summary>Saves the settings after a repair or restore; a write error is only logged.</summary>
+        private void SaveRepairedSettings()
         {
             try
             {
                 Logger.Information("Saving repaired settings.");
                 Save();
-                LastLoadDiagnostic = diagnostic;
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                Logger.Error(ex, "Failed to save default settings.");
-                LastLoadDiagnostic = $"{diagnostic} Nie udało się zapisać pliku: {ex.Message}";
+                Logger.Error(ex, "Failed to save repaired settings.");
             }
         }
 

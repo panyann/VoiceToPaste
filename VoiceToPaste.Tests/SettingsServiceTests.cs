@@ -46,7 +46,6 @@ namespace VoiceToPaste.Tests
             Assert.Contains("recordingLimitSeconds: 60", File.ReadAllText(service.SettingsPath));
             Assert.Contains($"uiLanguage: {settings.UiLanguage}", File.ReadAllText(service.SettingsPath));
             Assert.Contains("selectedTheme: dark", File.ReadAllText(service.SettingsPath));
-            Assert.NotNull(service.LastLoadDiagnostic);
         }
 
         [Theory]
@@ -56,24 +55,27 @@ namespace VoiceToPaste.Tests
         public void Load_ValidEngineValues_AreReadCorrectly(string engine, TranscriptionBackend expected)
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, $"transcriptionEngine: {engine}{Environment.NewLine}");
+            var yaml = $"transcriptionEngine: {engine}{Environment.NewLine}";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal(expected, settings.TranscriptionEngine);
-            Assert.Null(service.LastLoadDiagnostic);
+            // A clean load must not rewrite the file.
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
         public void Load_ValidWhisperModelId_IsReadCorrectly()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "whisperModelId: small\n");
+            var yaml = "whisperModelId: small\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal("small", settings.WhisperModelId);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
@@ -85,7 +87,6 @@ namespace VoiceToPaste.Tests
             var settings = service.Load();
 
             Assert.Null(settings.WhisperModelId);
-            Assert.NotNull(service.LastLoadDiagnostic);
             var repairedYaml = File.ReadAllText(service.SettingsPath);
             Assert.Contains("whisperModelId:", repairedYaml);
             Assert.DoesNotContain("removed-model", repairedYaml);
@@ -99,12 +100,13 @@ namespace VoiceToPaste.Tests
         public void Load_ValidTranscribeLanguageValues_AreReadCorrectly(string language, string expected)
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, $"transcribeLanguage: {language}{Environment.NewLine}");
+            var yaml = $"transcribeLanguage: {language}{Environment.NewLine}";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal(expected, settings.TranscribeLanguage);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Theory]
@@ -130,7 +132,6 @@ namespace VoiceToPaste.Tests
             var settings = service.Load();
 
             Assert.Equal(UiLanguages.GetSystemDefaultCode(), settings.UiLanguage);
-            Assert.NotNull(service.LastLoadDiagnostic);
             Assert.Contains($"uiLanguage: {settings.UiLanguage}", File.ReadAllText(service.SettingsPath));
         }
 
@@ -150,12 +151,13 @@ namespace VoiceToPaste.Tests
         public void Load_MissingSelectedTheme_ReturnsDarkTheme()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\n");
+            var yaml = "transcriptionEngine: cpu\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal(AppThemes.Dark, settings.SelectedTheme);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Theory]
@@ -164,12 +166,13 @@ namespace VoiceToPaste.Tests
         public void Load_ValidSelectedThemeValues_AreReadCorrectly(string selectedTheme)
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, $"selectedTheme: {selectedTheme}\n");
+            var yaml = $"selectedTheme: {selectedTheme}\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal(selectedTheme, settings.SelectedTheme);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Theory]
@@ -185,11 +188,12 @@ namespace VoiceToPaste.Tests
 
             var settings = service.Load();
 
-            // Naprawa dotyczy wyłącznie motywu — pozostałe ustawienia pozostają bez zmian.
+            // The repair touches only the theme — the remaining settings stay unchanged.
             Assert.Equal(TranscriptionBackend.Cpu, settings.TranscriptionEngine);
             Assert.Equal(expected, settings.SelectedTheme);
-            Assert.NotNull(service.LastLoadDiagnostic);
-            Assert.Contains($"selectedTheme: {expected}", File.ReadAllText(service.SettingsPath));
+            var repairedYaml = File.ReadAllText(service.SettingsPath);
+            Assert.Contains($"selectedTheme: {expected}", repairedYaml);
+            Assert.Contains("transcriptionEngine: cpu", repairedYaml);
         }
 
         [Fact]
@@ -201,7 +205,6 @@ namespace VoiceToPaste.Tests
             var settings = service.Load();
 
             Assert.Equal(AppThemes.Dark, settings.SelectedTheme);
-            Assert.NotNull(service.LastLoadDiagnostic);
             Assert.Contains("selectedTheme: dark", File.ReadAllText(service.SettingsPath));
         }
 
@@ -209,36 +212,39 @@ namespace VoiceToPaste.Tests
         public void Load_MissingStartInTray_ReturnsFalse()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\n");
+            var yaml = "transcriptionEngine: cpu\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.False(settings.StartInTray);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
         public void Load_MissingAutoStart_ReturnsFalse()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\n");
+            var yaml = "transcriptionEngine: cpu\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.False(settings.AutoStart);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
         public void Load_MissingRecordingLimit_ReturnsDefaultValue()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\n");
+            var yaml = "transcriptionEngine: cpu\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal(AppSettings.DefaultRecordingLimitSeconds, settings.RecordingLimitSeconds);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Theory]
@@ -256,7 +262,6 @@ namespace VoiceToPaste.Tests
 
             Assert.Equal(TranscriptionBackend.Cpu, settings.TranscriptionEngine);
             Assert.Equal(AppSettings.DefaultRecordingLimitSeconds, settings.RecordingLimitSeconds);
-            Assert.NotNull(service.LastLoadDiagnostic);
             Assert.Contains("recordingLimitSeconds: 60", File.ReadAllText(service.SettingsPath));
         }
 
@@ -264,24 +269,26 @@ namespace VoiceToPaste.Tests
         public void Load_HotkeySetToNull_DisablesGlobalHotkey()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "hotkey: null\n");
+            var yaml = "hotkey: null\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Null(settings.Hotkey);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
         public void Load_MissingHotkey_ReturnsDefaultHotkey()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\n");
+            var yaml = "transcriptionEngine: cpu\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal("Ctrl + Shift + Space", settings.Hotkey?.ToDisplayString());
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
@@ -293,7 +300,6 @@ namespace VoiceToPaste.Tests
             var settings = service.Load();
 
             Assert.Equal("Ctrl + Shift + Space", settings.Hotkey?.ToDisplayString());
-            Assert.NotNull(service.LastLoadDiagnostic);
             var repairedYaml = File.ReadAllText(service.SettingsPath);
             Assert.Contains("key: Space", repairedYaml);
             Assert.Contains("- control", repairedYaml);
@@ -304,12 +310,13 @@ namespace VoiceToPaste.Tests
         public void Load_ExistingCtrlSpaceHotkey_PreservesUserSetting()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "hotkey:\n  key: Space\n  modifiers:\n  - control\n");
+            var yaml = "hotkey:\n  key: Space\n  modifiers:\n  - control\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Equal("Ctrl + Space", settings.Hotkey?.ToDisplayString());
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
@@ -322,7 +329,6 @@ namespace VoiceToPaste.Tests
             var settings = service.Load();
 
             Assert.Equal(TranscriptionBackend.Auto, settings.TranscriptionEngine);
-            Assert.NotNull(service.LastLoadDiagnostic);
             Assert.Contains("transcriptionEngine: auto", File.ReadAllText(service.SettingsPath));
         }
 
@@ -335,7 +341,6 @@ namespace VoiceToPaste.Tests
             var settings = service.Load();
 
             Assert.Equal(TranscriptionBackend.Auto, settings.TranscriptionEngine);
-            Assert.NotNull(service.LastLoadDiagnostic);
             Assert.Contains("transcriptionEngine: auto", File.ReadAllText(service.SettingsPath));
         }
 
@@ -349,7 +354,6 @@ namespace VoiceToPaste.Tests
 
             Assert.Equal(TranscriptionBackend.Cpu, settings.TranscriptionEngine);
             Assert.Equal(TranscriptionLanguages.GetSystemDefaultCode(), settings.TranscribeLanguage);
-            Assert.NotNull(service.LastLoadDiagnostic);
             Assert.Contains($"transcribeLanguage: {settings.TranscribeLanguage}", File.ReadAllText(service.SettingsPath));
         }
 
@@ -401,24 +405,26 @@ namespace VoiceToPaste.Tests
         public void Load_MissingKeyWords_ReturnsEmptyList()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\n");
+            var yaml = "transcriptionEngine: cpu\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Empty(settings.KeyWords);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]
         public void Load_KeyWordsSetToNull_ReturnsEmptyList()
         {
             var service = CreateService();
-            File.WriteAllText(service.SettingsPath, "transcriptionEngine: cpu\nkeyWords: null\n");
+            var yaml = "transcriptionEngine: cpu\nkeyWords: null\n";
+            File.WriteAllText(service.SettingsPath, yaml);
 
             var settings = service.Load();
 
             Assert.Empty(settings.KeyWords);
-            Assert.Null(service.LastLoadDiagnostic);
+            Assert.Equal(yaml, File.ReadAllText(service.SettingsPath));
         }
 
         [Fact]

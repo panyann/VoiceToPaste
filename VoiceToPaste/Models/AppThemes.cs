@@ -1,8 +1,8 @@
 namespace VoiceToPaste.Models
 {
     /// <summary>
-    /// Obsługiwane motywy interfejsu aplikacji. Motyw pochodzi wyłącznie z ustawień
-    /// i jest całkowicie niezależny od motywu systemowego Windows.
+    /// Supported application UI themes. The theme comes exclusively from application
+    /// settings and is fully independent of the Windows system theme.
     /// </summary>
     public static class AppThemes
     {
@@ -10,9 +10,9 @@ namespace VoiceToPaste.Models
         public const string Light = "light";
 
         /// <summary>
-        /// Normalizuje wartość z ustawień: trim i porównanie bez rozróżnienia wielkości
-        /// liter. Nieznana, pusta lub null wartość wraca do motywu ciemnego,
-        /// który jest motywem domyślnym aplikacji.
+        /// Normalizes a value from settings: trimmed, case-insensitive comparison.
+        /// An unknown, empty, or null value falls back to the dark theme, which is
+        /// the application default.
         /// </summary>
         public static string Normalize(string? selectedTheme)
         {
