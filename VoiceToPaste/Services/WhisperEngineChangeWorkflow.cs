@@ -25,14 +25,10 @@ namespace VoiceToPaste.Services
     {
         private static readonly ILogger Logger = Log.ForContext<WhisperEngineChangeWorkflow>();
         private readonly AppSettings _settings;
-        private readonly SettingsService _settingsService;
 
-        internal WhisperEngineChangeWorkflow(SettingsService settingsService)
+        internal WhisperEngineChangeWorkflow()
         {
-            ArgumentNullException.ThrowIfNull(settingsService);
-
-            _settingsService = settingsService;
-            _settings = settingsService.Settings;
+            _settings = SettingsService.Settings;
         }
 
         /// <summary>
@@ -59,7 +55,7 @@ namespace VoiceToPaste.Services
             _settings.TranscriptionEngine = selectedEngine;
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
             }
             catch
             {

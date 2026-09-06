@@ -24,8 +24,7 @@ namespace VoiceToPaste
 
             try
             {
-                var settingsService = new SettingsService();
-                var settings = settingsService.Load();
+                var settings = SettingsService.Load();
 
                 // We set the culture before WinForms initialization so form resources,
                 // messages and tasks created later use the same language.
@@ -94,7 +93,6 @@ namespace VoiceToPaste
 
                 Log.Information("Starting the WinForms message loop with backend {Backend}.", preloadBackend);
                 using var applicationContext = new TrayApplicationContext(
-                    settingsService,
                     transcriptionService,
                     autoStartTaskService,
                     showSettingsAtStartup: !isSelectedModelAvailable);

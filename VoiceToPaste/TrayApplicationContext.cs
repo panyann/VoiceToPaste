@@ -20,7 +20,6 @@ namespace VoiceToPaste
         private readonly Icon _transcribingIcon;
         private readonly HotkeyService _hotkeyService;
         private readonly DictationController _dictationController;
-        private readonly SettingsService _settingsService;
         private readonly AutoStartTaskService _autoStartTaskService;
         private readonly AppSettings _settings;
         private bool _trayResourcesDisposed;
@@ -28,21 +27,19 @@ namespace VoiceToPaste
         private static readonly ILogger Logger = Log.ForContext<TrayApplicationContext>();
 
         public TrayApplicationContext(
-            SettingsService settingsService,
             TranscriptionService transcriptionService,
             AutoStartTaskService autoStartTaskService,
             bool showSettingsAtStartup = false)
         {
-            _settingsService = settingsService;
             _autoStartTaskService = autoStartTaskService;
-            _settings = settingsService.Settings;
+            _settings = SettingsService.Settings;
             _dictationController = new DictationController(
                 transcriptionService,
                 _settings);
             _dictationController.StateChanged += DictationController_StateChanged;
             _dictationController.ErrorOccurred += DictationController_ErrorOccurred;
 
-            _settingsForm = new SettingsForm(settingsService, autoStartTaskService);
+            _settingsForm = new SettingsForm(autoStartTaskService);
             _settingsForm.Resize += SettingsForm_Resize;
             _settingsForm.FormClosed += SettingsForm_FormClosed;
             _settingsForm.TesterVisibilityChanged += _dictationController.SetActivationsSuspended;
@@ -226,7 +223,7 @@ namespace VoiceToPaste
             _settings.Hotkey = hotkey;
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
                 _notifyIcon.Text = GetIdleTooltip();
                 return null;
             }

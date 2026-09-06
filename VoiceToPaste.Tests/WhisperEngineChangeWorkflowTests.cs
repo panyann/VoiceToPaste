@@ -7,6 +7,7 @@ namespace VoiceToPaste.Tests
     /// Testy workflow zmiany silnika Whisper na prawdziwym SettingsService z własnym
     /// katalogiem tymczasowym — bez delegatów i liczników wywołań.
     /// </summary>
+    [Collection(nameof(SettingsServiceCollection))]
     public sealed class WhisperEngineChangeWorkflowTests : IDisposable
     {
         private readonly string _tempDirectory;
@@ -22,16 +23,19 @@ namespace VoiceToPaste.Tests
             Directory.Delete(_tempDirectory, recursive: true);
         }
 
-        private SettingsService CreateLoadedService(TranscriptionBackend initialEngine)
+        private SettingsServiceTestContext CreateLoadedService(TranscriptionBackend initialEngine)
         {
-            var service = new SettingsService(_tempDirectory);
+            var service = new SettingsServiceTestContext(_tempDirectory);
             service.Load();
             service.Settings.TranscriptionEngine = initialEngine;
             return service;
         }
 
-        private WhisperEngineChangeWorkflow CreateWorkflow(TranscriptionBackend initialEngine) =>
-            new(CreateLoadedService(initialEngine));
+        private WhisperEngineChangeWorkflow CreateWorkflow(TranscriptionBackend initialEngine)
+        {
+            CreateLoadedService(initialEngine);
+            return new WhisperEngineChangeWorkflow();
+        }
 
         [Fact]
         public void EvaluateChange_SameEngine_ReturnsNoChange()
@@ -79,7 +83,7 @@ namespace VoiceToPaste.Tests
         public void EvaluateChange_DoesNotMutateSettingsOrWriteFile()
         {
             var service = CreateLoadedService(TranscriptionBackend.Cpu);
-            var workflow = new WhisperEngineChangeWorkflow(service);
+            var workflow = new WhisperEngineChangeWorkflow();
             var yamlBefore = File.ReadAllText(service.SettingsPath);
 
             workflow.EvaluateChange(TranscriptionBackend.Gpu, cudaInstalled: false);
@@ -92,13 +96,13 @@ namespace VoiceToPaste.Tests
         public void SaveChange_PersistsEngineToSettingsFile()
         {
             var service = CreateLoadedService(TranscriptionBackend.Cpu);
-            var workflow = new WhisperEngineChangeWorkflow(service);
+            var workflow = new WhisperEngineChangeWorkflow();
 
             workflow.SaveChange(TranscriptionBackend.Gpu);
 
             Assert.Equal(TranscriptionBackend.Gpu, service.Settings.TranscriptionEngine);
             // Świeża instancja serwisu — udowadniamy, że silnik siedzi w pliku, nie w pamięci.
-            var reloaded = new SettingsService(_tempDirectory).Load();
+            var reloaded = new SettingsServiceTestContext(_tempDirectory).Load();
             Assert.Equal(TranscriptionBackend.Gpu, reloaded.TranscriptionEngine);
         }
 
@@ -106,7 +110,7 @@ namespace VoiceToPaste.Tests
         public void SaveChange_AfterCudaInstall_CompletesTheFormFlow()
         {
             var service = CreateLoadedService(TranscriptionBackend.Cpu);
-            var workflow = new WhisperEngineChangeWorkflow(service);
+            var workflow = new WhisperEngineChangeWorkflow();
 
             var step = workflow.EvaluateChange(TranscriptionBackend.Gpu, cudaInstalled: false);
             Assert.Equal(WhisperEngineChangeStep.RequiresCudaInstall, step);
@@ -120,12 +124,12 @@ namespace VoiceToPaste.Tests
         [Fact]
         public void SaveChange_SaveFails_RollsBackEngineAndRethrows()
         {
-            var service = new SettingsService(_tempDirectory);
+            var service = new SettingsServiceTestContext(_tempDirectory);
             // Katalog w miejscu pliku tymczasowego deterministycznie wywala zapis atomowy.
             Directory.CreateDirectory(service.SettingsPath + ".tmp");
             service.Load();
             service.Settings.TranscriptionEngine = TranscriptionBackend.Cpu;
-            var workflow = new WhisperEngineChangeWorkflow(service);
+            var workflow = new WhisperEngineChangeWorkflow();
 
             var exception = Assert.ThrowsAny<Exception>(() => workflow.SaveChange(TranscriptionBackend.Gpu));
 

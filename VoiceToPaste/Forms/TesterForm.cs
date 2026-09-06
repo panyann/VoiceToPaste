@@ -1,20 +1,18 @@
-using DarkModeForms;
 using Serilog;
 using VoiceToPaste.Models;
 using VoiceToPaste.Resources;
 using VoiceToPaste.Services;
+using VoiceToPaste.Forms;
 using Whisper.net.LibraryLoader;
 
 namespace VoiceToPaste
 {
-    public partial class TesterForm : Form
+    public partial class TesterForm : AppForm
     {
         private static readonly ILogger Logger = Serilog.Log.ForContext<TesterForm>();
         private readonly AudioRecorder _recorder = new();
         private readonly KeywordReplacementService _keywordReplacementService = new();
         private readonly AppSettings _settings;
-
-        private DarkModeCS dm = null;
 
         public TesterForm(AppSettings settings)
         {
@@ -22,12 +20,6 @@ namespace VoiceToPaste
             InitializeComponent();
             Logger.Information("The transcription tester was opened.");
             LogTranscriptionServiceStatus();
-
-            dm = new DarkModeCS(this)
-            {
-                //[Optional] Choose your preferred color mode here:
-                ColorMode = DarkModeCS.DisplayMode.SystemDefault
-            };
         }
 
         /// <summary>

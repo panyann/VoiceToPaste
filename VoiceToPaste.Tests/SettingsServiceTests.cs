@@ -7,6 +7,7 @@ namespace VoiceToPaste.Tests
     /// Testy odczytu i zapisu settings.yaml. Każdy test pracuje na własnym katalogu
     /// tymczasowym, żeby nie dotykać plików obok aplikacji.
     /// </summary>
+    [Collection(nameof(SettingsServiceCollection))]
     public sealed class SettingsServiceTests : IDisposable
     {
         private readonly string _tempDirectory;
@@ -22,7 +23,7 @@ namespace VoiceToPaste.Tests
             Directory.Delete(_tempDirectory, recursive: true);
         }
 
-        private SettingsService CreateService() => new(_tempDirectory);
+        private SettingsServiceTestContext CreateService() => new(_tempDirectory);
 
         [Fact]
         public void Load_MissingFile_ReturnsDefaultsAndCreatesFile()

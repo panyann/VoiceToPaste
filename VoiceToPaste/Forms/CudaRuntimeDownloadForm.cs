@@ -1,11 +1,10 @@
-﻿using DarkModeForms;
-using Serilog;
+﻿using Serilog;
 using VoiceToPaste.Resources;
 using VoiceToPaste.Services;
 
 namespace VoiceToPaste.Forms
 {
-    public partial class CudaRuntimeDownloadForm : Form
+    public partial class CudaRuntimeDownloadForm : AppForm
     {
         private static readonly ILogger Logger = Log.ForContext<CudaRuntimeDownloadForm>();
         private readonly CudaRuntimeService _cudaRuntimeService;
@@ -13,16 +12,9 @@ namespace VoiceToPaste.Forms
         private bool _isDownloading;
         private bool _closeAfterCancellation;
 
-        private DarkModeCS dm = null;
-
         public CudaRuntimeDownloadForm()
             : this(new CudaRuntimeService())
         {
-            dm = new DarkModeCS(this)
-            {
-                //[Optional] Choose your preferred color mode here:
-                ColorMode = DarkModeCS.DisplayMode.SystemDefault
-            };
         }
 
         internal CudaRuntimeDownloadForm(CudaRuntimeService cudaRuntimeService)
@@ -37,12 +29,6 @@ namespace VoiceToPaste.Forms
                 FormatMegabytes(missingDownloadSize),
                 519);
             toolStripStatusLabel.Text = UiStrings.Get("DownloadWaitingToStart");
-
-            dm = new DarkModeCS(this)
-            {
-                //[Optional] Choose your preferred color mode here:
-                ColorMode = DarkModeCS.DisplayMode.SystemDefault
-            };
         }
 
         /// <summary>Pobiera CUDA wyłącznie po świadomym kliknięciu użytkownika.</summary>

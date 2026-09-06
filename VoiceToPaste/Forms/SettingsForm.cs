@@ -1,15 +1,13 @@
-﻿using DarkModeForms;
-using Serilog;
+﻿using Serilog;
 using VoiceToPaste.Models;
 using VoiceToPaste.Resources;
 using VoiceToPaste.Services;
 
 namespace VoiceToPaste.Forms
 {
-    public partial class SettingsForm : Form
+    public partial class SettingsForm : AppForm
     {
         private static readonly ILogger Logger = Log.ForContext<SettingsForm>();
-        private readonly SettingsService _settingsService;
         private readonly AutoStartTaskService _autoStartTaskService;
         private readonly CudaRuntimeService _cudaRuntimeService = new();
         private readonly WhisperEngineChangeWorkflow _whisperEngineChangeWorkflow;
@@ -28,16 +26,11 @@ namespace VoiceToPaste.Forms
         public event Action<int>? RecordingLimitChanged;
         public event Action? RestartRequested;
 
-        private DarkModeCS dm = null;
-
-        public SettingsForm(
-            SettingsService settingsService,
-            AutoStartTaskService autoStartTaskService)
+        public SettingsForm(AutoStartTaskService autoStartTaskService)
         {
-            _settingsService = settingsService;
             _autoStartTaskService = autoStartTaskService;
-            _settings = settingsService.Settings;
-            _whisperEngineChangeWorkflow = new WhisperEngineChangeWorkflow(_settingsService);
+            _settings = SettingsService.Settings;
+            _whisperEngineChangeWorkflow = new WhisperEngineChangeWorkflow();
             InitializeComponent();
             ApplyVersionToTitle();
             InitializeEngineCombo();
@@ -47,12 +40,6 @@ namespace VoiceToPaste.Forms
             ApplySettingsToControls();
             InitializeRecordingLimitControls();
             _hotkeyCapture = CreateHotkeyCapture();
-
-            dm = new DarkModeCS(this)
-            {
-                //[Optional] Choose your preferred color mode here:
-                ColorMode = DarkModeCS.DisplayMode.SystemDefault
-            };
         }
 
         // Numer wersji zawiera metadane commitu po '+'; w tytule pokazujemy sam numer wersji.
@@ -223,7 +210,7 @@ namespace VoiceToPaste.Forms
             _settings.WhisperModelId = selectedModel?.Id;
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
                 Logger.Information("Saved the Whisper model selection {ModelId}. Restarting the application.", selectedModel?.Id ?? "not selected");
                 RestartRequested?.Invoke();
             }
@@ -301,7 +288,7 @@ namespace VoiceToPaste.Forms
 
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
                 TranscriptionService.Instance.SetLanguage(selectedLanguage);
                 Logger.Information("Saved the transcription language selection {Language}.", selectedLanguage);
             }
@@ -337,7 +324,7 @@ namespace VoiceToPaste.Forms
 
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
                 Logger.Information("Saved the interface language {Language}. Restarting the application.", selectedLanguage);
                 RestartRequested?.Invoke();
             }
@@ -366,7 +353,7 @@ namespace VoiceToPaste.Forms
 
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
                 Logger.Information("Saved the start-in-tray setting: {StartInTray}.", startInTray);
             }
             catch (Exception ex)
@@ -403,7 +390,7 @@ namespace VoiceToPaste.Forms
                 taskUpdated = true;
 
                 _settings.AutoStart = autoStart;
-                _settingsService.Save();
+                SettingsService.Save();
                 Logger.Information("Saved the autostart setting: {AutoStart}.", autoStart);
             }
             catch (Exception ex)
@@ -654,7 +641,7 @@ namespace VoiceToPaste.Forms
             _settings.RecordingLimitSeconds = recordingLimitSeconds;
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
             }
             catch (Exception ex)
             {
@@ -690,7 +677,7 @@ namespace VoiceToPaste.Forms
 
         private void btnKeyWords_Click(object sender, EventArgs e)
         {
-            using var keyWordsForm = new KeyWordsForm(_settingsService);
+            using var keyWordsForm = new KeyWordsForm();
             keyWordsForm.ShowDialog(this);
         }
 

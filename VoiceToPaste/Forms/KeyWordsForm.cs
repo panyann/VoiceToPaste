@@ -1,5 +1,4 @@
-﻿using DarkModeForms;
-using Serilog;
+﻿using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,23 +17,19 @@ namespace VoiceToPaste.Forms
     /// Editor for phrase replacement rules in transcription. It works on a copy of the list
     /// from AppSettings, so unsaved changes never reach the shared model.
     /// </summary>
-    public partial class KeyWordsForm : Form
+    public partial class KeyWordsForm : AppForm
     {
         private static readonly ILogger Logger = Log.ForContext<KeyWordsForm>();
 
-        private readonly SettingsService _settingsService;
         private readonly AppSettings _settings;
         private readonly BindingList<DGV_KeyWords> _keywords;
         private readonly System.Windows.Forms.Timer _saveStatusTimer = new() { Interval = 2000 };
         private bool _loading;
         private bool _isDirty;
 
-        private DarkModeCS dm = null;
-
-        public KeyWordsForm(SettingsService settingsService)
+        public KeyWordsForm()
         {
-            _settingsService = settingsService;
-            _settings = settingsService.Settings;
+            _settings = SettingsService.Settings;
             InitializeComponent();
 
             // A copy of the items so editing the grid does not mutate the shared settings before saving.
@@ -54,12 +49,6 @@ namespace VoiceToPaste.Forms
             bindingSource.ListChanged += BindingSource_ListChanged;
             FormClosing += KeyWordsForm_FormClosing;
             _saveStatusTimer.Tick += SaveStatusTimer_Tick;
-
-            dm = new DarkModeCS(this)
-            {
-                //[Optional] Choose your preferred color mode here:
-                ColorMode = DarkModeCS.DisplayMode.SystemDefault
-            };
         }
 
         private void DataGridView_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
@@ -126,7 +115,7 @@ namespace VoiceToPaste.Forms
             _settings.KeyWords = normalized;
             try
             {
-                _settingsService.Save();
+                SettingsService.Save();
             }
             catch (Exception ex)
             {
